@@ -1,4 +1,7 @@
 package com.example.gymfit02.Activities;
 
-public class FriendsActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class FriendsActivity extends AppCompatActivity {
+
 }
