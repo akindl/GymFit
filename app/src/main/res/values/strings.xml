@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">GymFit02</string>
+    <string name="register_headline">Registrieren</string>
+    <string name="register_description">Erstelle einen neuen GymFit Account</string>
+    <string name="register_name_hint">Dein Name</string>
+    <string name="register_email_hint">Deine E-Mail Adresse</string>
+    <string name="register_password_hint">Wähle ein Passwort</string>
+    <string name="register_password_confirm_hint">Passwort bitte bestätigen</string>
+    <string name="register_button_createNewAccount">REGISTRIEREN</string>
+    <string name="register_text_alreadyRegisteredToLogin">Du hast bereits ein Konto? Jetzt einloggen!</string>
+    <string name="login_headline">Einloggen</string>
+    <string name="login_description">mit deinem GymFit Account</string>
+    <string name="login_email_hint">Deine E-Mail Adresse</string>
+    <string name="login_password_hint">Dein Passwort</string>
+    <string name="login_button">LOGIN</string>
+    <string name="login_text_NoAccountToRegister">Du hast noch kein GymFit Konto?</string>
+    <string name="login_text_ForgotPassword">Passwort vergessen?</string>
+    <string name="profile_button_logout">Ausloggen</string>
+    <string name="profile_button_resendVerificationCode">E-Mail Verifizierung erneut senden</string>
+    <string name="profile_text_accountNotVerified">Wichtig: Dein Konto ist noch nicht verifiziert!</string>
+
+</resources>
