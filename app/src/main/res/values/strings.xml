@@ -18,10 +18,12 @@
     <string name="profile_button_logout">Ausloggen</string>
     <string name="profile_button_resendVerificationCode">E-Mail Verifizierung erneut senden</string>
     <string name="profile_text_accountNotVerified">Wichtig: Dein Konto ist noch nicht verifiziert!</string>
-    <string name="navbar_title_dashboard">Dashboard</string>
+    <string name="navbar_title_dashboard">Training</string>
     <string name="navbar_title_analyse">Analyse</string>
     <string name="navbar_title_friends">Freunde</string>
     <string name="navbar_title_profil">Profil</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
