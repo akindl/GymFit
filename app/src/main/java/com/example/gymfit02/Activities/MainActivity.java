@@ -25,6 +25,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
 // import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView btm_nav_view;
     private Button mLogoutBtn;
     private FirebaseAuth fAuth;
-//    private FirebaseFirestore fStore;
+    private FirebaseFirestore db;
     private String userID;
     private Button resendVerificationCode;
     private TextView mVerifyMsg;
@@ -46,65 +49,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mLogoutBtn = findViewById(R.id.buttonLogout);
         dashboardFragment = new DashboardFragment();
         analyseFragment = new AnalyseFragment();
         friendsFragment = new FriendsFragment();
         profilFragment = new ProfilFragment();
 
-        // Firebase
         fAuth = FirebaseAuth.getInstance();
-        // fStore = FirebaseFirestore.getInstance();
+        // Enable database offline support
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+
+        db = FirebaseFirestore.getInstance();
+        db.setFirestoreSettings(settings);
 
 
-        resendVerificationCode = findViewById(R.id.buttonResendVerificationCode);
-        mVerifyMsg = findViewById(R.id.textViewAccountNotVerified);
+        // BottomNavigationView
+        btm_nav_view = findViewById(R.id.bottomNavigationView);
+
+        navigationListener();
+
+
 
         userID = fAuth.getCurrentUser().getUid();
         // FirebaseUser user = fAuth.getCurrentUser();
 
-        //TODO BottomNavigationView
-        btm_nav_view = findViewById(R.id.bottomNavigationView);
-
-
-
-
-
-        /*
-        // if email is not verified show button to send verification email again
-        if(!user.isEmailVerified()) {
-            //TODO Verifizierungsprozess ist jetzt in dem ProfilFragment - Neu Verknüpfen
-          //  mVerifyMsg.setVisibility(View.VISIBLE);
-          //  resendVerificationCode.setVisibility(View.VISIBLE);
-
-            resendVerificationCode.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    // Send email with verification link to verify user email address
-                    FirebaseUser user = fAuth.getCurrentUser();
-                    user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(MainActivity.this, "Du hast eine E-Mail zum Bestätigen erhalten.", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("Registration", "sendEmailVerification: failure - email not sent! " + e.getMessage());
-                        }
-                    });
-                }
-            });
-
-        }
-        */
-
-
-        navigationListener();
-
-        // Go to LoginActivity if user click to logout
-        //logoutUserListener();
     }
 
 
@@ -119,19 +88,19 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.dashboard:
                         setFragment(dashboardFragment);
-                        Toast.makeText(MainActivity.this, "Training", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MainActivity.this, "Training", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.analyse:
                         setFragment(analyseFragment);
-                        Toast.makeText(MainActivity.this, "Analyse", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MainActivity.this, "Analyse", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.friends:
                         setFragment(friendsFragment);
-                        Toast.makeText(MainActivity.this, "Freundesliste", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MainActivity.this, "Freundesliste", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.profil:
                         setFragment(profilFragment);
-                        Toast.makeText(MainActivity.this, "Profil", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MainActivity.this, "Profil", Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return false;
@@ -147,28 +116,10 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.mainActivityContainer, fragment);
+        fragmentTransaction.replace(R.id.fragment_container_view, fragment);
         fragmentTransaction.commit();
 
     }
 
 
-
-    /**
-     * Logout-Button OnClickListener:
-     * If user click on the logout button he will be logout.
-     */
-    private void logoutUserListener() {
-        mLogoutBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Du hast Dich erfolgreich abgemeldet!", Toast.LENGTH_SHORT).show();
-                Log.d("Logout", "logoutUser: success");
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                fAuth.signOut();
-            }
-
-        });
-    }
 }

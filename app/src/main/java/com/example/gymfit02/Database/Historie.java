@@ -1,4 +1,7 @@
 package com.example.gymfit02.Database;
 
-public class Exercises {
+public class Historie {
+
+
+
 }
