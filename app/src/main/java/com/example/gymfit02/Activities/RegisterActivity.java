@@ -142,8 +142,8 @@ public class RegisterActivity extends AppCompatActivity {
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String, Object> fUser = new HashMap<>();
 
-                            fUser.put("name", mUserEmail.getText().toString().trim());
-                            fUser.put("email", mUserName.getText().toString().trim());
+                            fUser.put("name", mUserName.getText().toString().trim());
+                            fUser.put("email", mUserEmail.getText().toString().trim());
                             documentReference.set(fUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
