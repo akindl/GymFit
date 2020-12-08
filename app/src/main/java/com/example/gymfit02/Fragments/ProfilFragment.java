@@ -1,6 +1,5 @@
 package com.example.gymfit02.Fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit02.Activities.LoginActivity;
-import com.example.gymfit02.Activities.MainActivity;
 import com.example.gymfit02.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,8 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.util.concurrent.Executor;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,9 +50,9 @@ public class ProfilFragment extends Fragment {
     private String userId;
     private FirebaseUser user;
 
-    private ImageView profilImage;
-    private TextView userName;
-    private TextView userEmail;
+    private ImageView profileImageView;
+    private TextView userNameView;
+    private TextView userEmailView;
 
     private Button mLogoutBtn;
     private Button resendVerificationCode;
@@ -63,6 +60,7 @@ public class ProfilFragment extends Fragment {
 
     private DocumentReference documentReferenceUsers;
     private StorageReference storageReference;
+    private StorageReference profileImageRef;
 
 
     public ProfilFragment() {
@@ -93,8 +91,10 @@ public class ProfilFragment extends Fragment {
         userId = fAuth.getCurrentUser().getUid();
         // Reference to get the userData like name and email
         documentReferenceUsers = fStore.collection("users").document(userId);
-        // Reference to Upload the profilImage
+        // Reference to Upload the profileImage
         storageReference = FirebaseStorage.getInstance().getReference();
+        //Reference to the uploaded profileImage of the current user
+        profileImageRef = storageReference.child("users/" + userId + "profileImage.jpg");
     }
 
     @Override
@@ -120,23 +120,28 @@ public class ProfilFragment extends Fragment {
 
 
         // Get profil information
-        userName = (TextView) rootView.findViewById(R.id.userName);
-        userEmail = (TextView) rootView.findViewById(R.id.userEmail);
+        userNameView = (TextView) rootView.findViewById(R.id.userName);
+        userEmailView = (TextView) rootView.findViewById(R.id.userEmail);
         setDocumentReferenceUsersListener();
-        profilImage = (ImageView) rootView.findViewById(R.id.profilImage);
-        setChangeProfilImageListener();
+        profileImageView = (ImageView) rootView.findViewById(R.id.profilImage);
+        setChangeProfileImageListener();
+        getProfileImageFromStorage();
+
 
         return rootView;
 
     }
 
 
+
+    // ---------------------- PROFILE IMAGE METHODS ------------------------------------------------
+
     /**
-     * Profil Image Listener
+     * Profile Image Listener
      * User can change the profil image with images from his gallery
      */
-    private void setChangeProfilImageListener() {
-        profilImage.setOnClickListener(new View.OnClickListener() {
+    private void setChangeProfileImageListener() {
+        profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // open the gallery
@@ -154,39 +159,65 @@ public class ProfilFragment extends Fragment {
         if(requestCode == REQUEST_CODE_IMAGE) {
             Uri imageUri = data.getData();
             // Set the profil Image to the selected Image from gallery
-            profilImage.setImageURI(imageUri);
-            Toast.makeText(getActivity(), "Bild ausgetauscht.", Toast.LENGTH_SHORT).show();
+            // HINT: Disable that the image is shown after it was selected because we want to
+            // download the uploaded image to get it every time the user login
+            // profilImage.setImageURI(imageUri);
+            // Toast.makeText(getActivity(), "Bild ausgetauscht.", Toast.LENGTH_SHORT).show();
             uploadImageToFirebase(imageUri);
         }
     }
 
     /**
-     * Help-method to upload image file to Firebase
+     * Help-method to upload image file to Firebase Storage
      */
     private void uploadImageToFirebase(Uri imageUri) {
 
-        StorageReference fileRef = storageReference.child("profile.jpg");
+        final StorageReference fileRef = storageReference.child("users/" + userId + "profileImage.jpg");
         fileRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        // Uri downloadUrl = taskSnapshot.getDownloadUrl();#
                         Log.d(TAG, "ImageUpload: success");
                         Toast.makeText(getActivity(), "Bild hochgeladen.", Toast.LENGTH_SHORT).show();
+                        // Get the URL of the image
+                        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Set the image to the imageView of the profilFragment
+                                Picasso.get().load(uri).into(profileImageView);
+                            }
+                        });
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Log.d(TAG, "ImageUpload: failure");
+                        Log.d(TAG, "ImageUpload: failed");
                     }
                 });
     }
 
 
     /**
-     * Profil information Listener
+     * Getter Method
+     * Download the profilImage and set it into the profilImageView
+     */
+    private void getProfileImageFromStorage() {
+        profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(profileImageView);
+            }
+        });
+    }
+
+
+
+    // ---------------------- PROFILE INFORMATION METHODS ------------------------------------------
+
+    /**
+     * Profile information Listener
      * Update the shown userName and userEmail
      */
     private void setDocumentReferenceUsersListener() {
@@ -200,8 +231,8 @@ public class ProfilFragment extends Fragment {
                 }
 
                 if (snapshot != null && snapshot.exists()) {
-                    userName.setText(snapshot.getString("name"));
-                    userEmail.setText(snapshot.getString("email"));
+                    userNameView.setText(snapshot.getString("name"));
+                    userEmailView.setText(snapshot.getString("email"));
 
                     Log.d(TAG, "Current data: " + snapshot.getData());
 
@@ -212,6 +243,10 @@ public class ProfilFragment extends Fragment {
         });
     }
 
+
+
+
+    // ---------------------- PROFILE VERIFICATION AND LOGOUT METHODS ------------------------------
 
     /**
      * ResendVerificationCode-Button OnClickListener
