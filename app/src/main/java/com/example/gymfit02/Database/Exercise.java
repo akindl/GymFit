@@ -2,11 +2,15 @@ package com.example.gymfit02.Database;
 
 import android.media.Image;
 
+import java.util.HashMap;
+
 public class Exercise {
 
     private String name;
     private String note;
     private Image image;
+    private HashMap<Object, String> infos;
+
 
     // private History (Subcollection)
 
@@ -32,6 +36,10 @@ public class Exercise {
         return note;
     }
 
+    public HashMap<Object, String> getInfos() {
+        return infos;
+    }
+
 
     // SETTER
 
@@ -45,5 +53,9 @@ public class Exercise {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public void setInfos(HashMap<Object, String> infos) {
+        this.infos = infos;
     }
 }

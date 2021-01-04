@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GymFit02</string>
+    <string name="app_name">GymFit</string>
     <string name="register_headline">Registrieren</string>
     <string name="register_description">Erstelle einen neuen GymFit Account</string>
     <string name="register_name_hint">Dein Name</string>

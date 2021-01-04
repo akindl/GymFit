@@ -3,6 +3,7 @@ package com.example.gymfit02.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,12 @@ import com.google.firebase.storage.StorageReference;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AnalyseFragment#newInstance} factory method to
+ * Use the {@link TrainingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AnalyseFragment extends Fragment {
+public class TrainingFragment extends Fragment {
 
-    private static final String TAG = "analyseFragment";
+    private static final String TAG = "trainingFragment";
 
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
@@ -32,7 +33,8 @@ public class AnalyseFragment extends Fragment {
     private DocumentReference documentReferenceUsers;
     private StorageReference storageReference;
 
-    public AnalyseFragment() {
+
+    public TrainingFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +44,11 @@ public class AnalyseFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AnalyseFragment.
+     * @return A new instance of fragment DashboardFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AnalyseFragment newInstance(String param1, String param2) {
-        AnalyseFragment fragment = new AnalyseFragment();
+    public static TrainingFragment newInstance(String param1, String param2) {
+        TrainingFragment fragment = new TrainingFragment();
 
         return fragment;
     }
@@ -68,7 +70,7 @@ public class AnalyseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_analyse, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_training, container, false);
 
         return rootView;
     }

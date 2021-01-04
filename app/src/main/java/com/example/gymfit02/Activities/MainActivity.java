@@ -3,31 +3,25 @@ package com.example.gymfit02.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gymfit02.Fragments.AnalyseFragment;
-import com.example.gymfit02.Fragments.DashboardFragment;
+import com.example.gymfit02.Fragments.TrainingFragment;
 import com.example.gymfit02.Fragments.FriendsFragment;
 import com.example.gymfit02.Fragments.ProfilFragment;
+import com.example.gymfit02.Fragments.ExercisesOverviewFragment;
 import com.example.gymfit02.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
@@ -42,20 +36,26 @@ public class MainActivity extends AppCompatActivity {
     private String userID;
     private Button resendVerificationCode;
     private TextView mVerifyMsg;
-    private Fragment dashboardFragment;
+    private Fragment trainingFragment;
     private Fragment analyseFragment;
     private Fragment friendsFragment;
     private Fragment profilFragment;
+
+    private Fragment exercisesOverviewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dashboardFragment = new DashboardFragment();
+        trainingFragment = new TrainingFragment();
         analyseFragment = new AnalyseFragment();
         friendsFragment = new FriendsFragment();
         profilFragment = new ProfilFragment();
+
+        //TODO delete this fragment verweis
+        exercisesOverviewFragment = new ExercisesOverviewFragment();
+
 
         fAuth = FirebaseAuth.getInstance();
         // Enable database offline support
@@ -73,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
         navigationListener();
 
 
+        // Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+
     }
 
 
@@ -86,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.dashboard:
-                        setFragment(dashboardFragment);
+                        setFragment(exercisesOverviewFragment); // trainingFragment wieder einsetzen
                         // Toast.makeText(MainActivity.this, "Training", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.analyse:
