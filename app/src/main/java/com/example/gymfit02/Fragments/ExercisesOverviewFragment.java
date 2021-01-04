@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.gymfit02.Adapter.ExerciseListAdapter;
 import com.example.gymfit02.Models.DatabaseExerciseModel;
 import com.example.gymfit02.R;
 import com.example.gymfit02.Util.ExerciseViewHolder;
@@ -84,14 +85,11 @@ public class ExercisesOverviewFragment extends Fragment {
 
         // RecyclerOptions
         options = new FirestoreRecyclerOptions.Builder<DatabaseExerciseModel>()
+                .setLifecycleOwner(this)
                 .setQuery(query, DatabaseExerciseModel.class)
                 .build();
 
     }
-
-
-    // -----------------------------------------------------------------------------------------
-    // YT TUTORIAL Recycler View https://www.youtube.com/watch?v=cBwaJYocb9I&t=419s
 
 
     @Override
@@ -100,57 +98,17 @@ public class ExercisesOverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_exercises_overview, container, false);
 
-        createRecyclerAdapter();
+        adapter = new ExerciseListAdapter(options);
+
 
         exercisesRecyclerView = (RecyclerView) rootView.findViewById(R.id.exercisesRecyclerView);
         exercisesRecyclerView.setHasFixedSize(true);
-        // exercisesRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         exercisesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         exercisesRecyclerView.setAdapter(adapter);
 
         return rootView;
     }
 
-    /**
-     * Initilize RecyclerViewAdapter Options to show DatabaseExercises
-     */
-
-    private void createRecyclerAdapter() {
-
-        // RecyclerAdapter
-        adapter = new FirestoreRecyclerAdapter<DatabaseExerciseModel, ExerciseViewHolder>(options) {
-            @NonNull
-            @Override
-            public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_database_exercise_single, parent, false);
-                return new ExerciseViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position, @NonNull DatabaseExerciseModel model) {
-                holder.getExercise_name().setText(model.getName());
-                holder.getExercise_numberOfSets().setText(model.getNumberOfSets());
-                holder.getExercise_volume().setText(model.getVolume());
-                holder.getExercise_maxLoad().setText(model.getMaxLoad());
-                holder.getExercice_notes().setText(model.getNotes());
-
-            }
-        };
-    }
-
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
 
 
 }
