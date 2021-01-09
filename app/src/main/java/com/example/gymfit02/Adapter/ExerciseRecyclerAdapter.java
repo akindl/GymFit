@@ -15,14 +15,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 
-public class ExerciseListAdapter extends FirestoreRecyclerAdapter<DatabaseExerciseModel, ExerciseViewHolder> {
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
-    public ExerciseListAdapter(@NonNull FirestoreRecyclerOptions<DatabaseExerciseModel> options) {
+public class ExerciseRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseExerciseModel, ExerciseViewHolder> {
+
+
+    public ExerciseRecyclerAdapter(@NonNull FirestoreRecyclerOptions<DatabaseExerciseModel> options) {
         super(options);
     }
 

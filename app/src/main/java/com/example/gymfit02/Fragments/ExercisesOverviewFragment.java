@@ -2,7 +2,6 @@ package com.example.gymfit02.Fragments;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,12 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
-import com.example.gymfit02.Adapter.ExerciseListAdapter;
+import com.example.gymfit02.Adapter.ExerciseRecyclerAdapter;
 import com.example.gymfit02.Models.DatabaseExerciseModel;
 import com.example.gymfit02.R;
-import com.example.gymfit02.Util.ExerciseViewHolder;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +30,7 @@ import com.google.firebase.storage.StorageReference;
  */
 public class ExercisesOverviewFragment extends Fragment {
 
-    private static final String TAG = "trainingFragment";
+    private static final String TAG = "exerciseOverviewFragment";
 
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
@@ -47,19 +45,13 @@ public class ExercisesOverviewFragment extends Fragment {
     private FirestoreRecyclerOptions<DatabaseExerciseModel> options;
     private FirestoreRecyclerAdapter adapter;
 
+    private Button createExerciseButton;
+
     public ExercisesOverviewFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ExercisesOverviewFragment newInstance(String param1, String param2) {
         ExercisesOverviewFragment fragment = new ExercisesOverviewFragment();
 
@@ -70,6 +62,28 @@ public class ExercisesOverviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setupFirestoreConnection();
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_exercises_overview, container, false);
+
+        setupRecyclerView(rootView);
+
+        createExerciseButton = (Button) rootView.findViewById(R.id.createExerciseButton);
+        setOpenCreateExerciseFragmentListener();
+
+        return rootView;
+    }
+
+
+    /**
+     * Help-method to connect to Firestore
+     */
+    private void setupFirestoreConnection() {
         // Connect to Firebase user
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
@@ -79,36 +93,53 @@ public class ExercisesOverviewFragment extends Fragment {
         // Reference to get the userData
         documentReferenceUsers = fStore.collection("users").document(userId);
 
+    }
+
+    /**
+     * Help-method to setup the RecyclerView
+     * @param view
+     */
+    private void setupRecyclerView(View view) {
+
         // Query
-        // query = fStore.collection("testData");
-        query = fStore.collection("users").document(userId).collection("Database-Exercises");
+        query = fStore.collection("users")
+                .document(userId).collection("Database-Exercises")
+                .orderBy("name", Query.Direction.ASCENDING); //alphabetisch sortiert
 
         // RecyclerOptions
         options = new FirestoreRecyclerOptions.Builder<DatabaseExerciseModel>()
-                .setLifecycleOwner(this)
+                .setLifecycleOwner(this) // this start and stop the adapter automatically
                 .setQuery(query, DatabaseExerciseModel.class)
                 .build();
 
-    }
+        adapter = new ExerciseRecyclerAdapter(options);
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_exercises_overview, container, false);
-
-        adapter = new ExerciseListAdapter(options);
-
-
-        exercisesRecyclerView = (RecyclerView) rootView.findViewById(R.id.exercisesRecyclerView);
+        exercisesRecyclerView = (RecyclerView) view.findViewById(R.id.exercisesRecyclerView);
         exercisesRecyclerView.setHasFixedSize(true);
         exercisesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         exercisesRecyclerView.setAdapter(adapter);
 
-        return rootView;
     }
 
+
+    /**
+     * When user click on the button "Übung erstellen" he will direct to CreateExerciseFragment
+     */
+    public void setOpenCreateExerciseFragmentListener() {
+        createExerciseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CreateExerciseFragment createExerciseFragment = new CreateExerciseFragment();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            // fragment_container_view is the FragmentContainer of all fragments in MainActivity
+                            .replace(R.id.fragment_container_view, createExerciseFragment, "openCreateExerciseFragment")
+                            .addToBackStack(null)
+                            .commit();
+                }
+        });
+
+
+    }
 
 
 }

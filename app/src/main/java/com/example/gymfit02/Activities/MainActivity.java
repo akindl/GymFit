@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         fAuth = FirebaseAuth.getInstance();
+
         // Enable database offline support
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
@@ -70,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
         // BottomNavigationView
         btm_nav_view = findViewById(R.id.bottomNavigationView);
 
+        // Setup BottomNavigationBar and set trainingFragment as first default fragment
         navigationListener();
+        setFragment(trainingFragment);
 
 
         // Toolbar
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.dashboard:
-                        setFragment(exercisesOverviewFragment); // trainingFragment wieder einsetzen
+                        setFragment(trainingFragment); // trainingFragment wieder einsetzen | exercisesOverviewFragment
                         // Toast.makeText(MainActivity.this, "Training", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.analyse:

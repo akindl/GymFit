@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">GymFit</string>
+
+    <!-- Activity: Register -->
     <string name="register_headline">Registrieren</string>
     <string name="register_description">Erstelle einen neuen GymFit Account</string>
     <string name="register_name_hint">Dein Name</string>
@@ -8,6 +10,9 @@
     <string name="register_password_confirm_hint">Passwort bitte bestätigen</string>
     <string name="register_button_createNewAccount">REGISTRIEREN</string>
     <string name="register_text_alreadyRegisteredToLogin">Du hast bereits ein Konto? Jetzt einloggen!</string>
+
+
+    <!-- Activity: Login -->
     <string name="login_headline">Einloggen</string>
     <string name="login_description">mit deinem GymFit Account</string>
     <string name="login_email_hint">Deine E-Mail Adresse</string>
@@ -15,17 +20,42 @@
     <string name="login_button">LOGIN</string>
     <string name="login_text_NoAccountToRegister">Du hast noch kein GymFit Konto?</string>
     <string name="login_text_ForgotPassword">Passwort vergessen?</string>
-    <string name="profile_button_logout">Ausloggen</string>
-    <string name="profile_button_resendVerificationCode">E-Mail Verifizierung erneut senden</string>
-    <string name="profile_text_accountNotVerified">Wichtig: Dein Konto ist noch nicht verifiziert!</string>
+
+
+    <!-- Navigation -->
     <string name="navbar_title_dashboard">Training</string>
     <string name="navbar_title_analyse">Analyse</string>
     <string name="navbar_title_friends">Freunde</string>
     <string name="navbar_title_profil">Profil</string>
 
+
     <!-- Fragment: Profil -->
     <string name="fragment_profil_userName">Max Mustermann</string>
     <string name="fragment_profil_userEmail">mustermann@gmail.com</string>
+    <string name="profile_button_logout">Ausloggen</string>
+    <string name="profile_button_resendVerificationCode">E-Mail Verifizierung erneut senden</string>
+    <string name="profile_text_accountNotVerified">Wichtig: Dein Konto ist noch nicht verifiziert!</string>
+
+
+    <!-- Fragment: ExercisesOverview -->
+    <string name="fragment_exercisesOverview">Übung erstellen</string>
+
+
+    <!-- Fragment: ExercisesOverview -->
+    <string name="fragment_createExercise_title">Name der Übung</string>
+    <string name="fragment_createExercise_settingTitle">Welche Eigenschaft hat die neue Übung?</string>
+    <string name="fragment_createExercise_settingWeight">Gewicht</string>
+    <string name="fragment_createExercise_settingTime">Laufzeit</string>
+    <string name="fragment_createExercise_confirm">Übung erstellen</string>
+
+
+    <!-- Fragment: ExercisesOverview -->
+    <string name="fragment_training_headline_plans">Trainingspläne</string>
+    <string name="fragment_training_subheadline_plans">Erstelle deine eigenen Trainingseinheiten</string>
+    <string name="fragment_training_headline_exercises">Übungen</string>
+    <string name="fragment_training_subheadline_exercises">Wähle die Übungen für dein Training aus</string>
+
+
 
 
 </resources>
