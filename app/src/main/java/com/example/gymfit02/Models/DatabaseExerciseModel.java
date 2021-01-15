@@ -13,9 +13,9 @@ public class DatabaseExerciseModel {
 
     // CONSTRUCTOR
 
-    private DatabaseExerciseModel() {}
+    public DatabaseExerciseModel() {}
 
-    private DatabaseExerciseModel(String name, String notes) {
+    public DatabaseExerciseModel(String name, String notes) {
         this.name = name;
         this.notes = notes;
     }

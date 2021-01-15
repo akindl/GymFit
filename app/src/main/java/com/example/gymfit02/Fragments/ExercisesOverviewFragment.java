@@ -73,7 +73,7 @@ public class ExercisesOverviewFragment extends Fragment {
 
         setupRecyclerView(rootView);
 
-        createExerciseButton = (Button) rootView.findViewById(R.id.createExerciseButton);
+        createExerciseButton = (Button) rootView.findViewById(R.id.addExerciseButton);
         setOpenCreateExerciseFragmentListener();
 
         return rootView;
@@ -102,9 +102,12 @@ public class ExercisesOverviewFragment extends Fragment {
     private void setupRecyclerView(View view) {
 
         // Query
+
         query = fStore.collection("users")
-                .document(userId).collection("Database-Exercises")
-                .orderBy("name", Query.Direction.ASCENDING); //alphabetisch sortiert
+                .document(userId).collection("Exercises")
+                .orderBy("exerciseName", Query.Direction.ASCENDING); //alphabetisch sortiert
+
+
 
         // RecyclerOptions
         options = new FirestoreRecyclerOptions.Builder<DatabaseExerciseModel>()

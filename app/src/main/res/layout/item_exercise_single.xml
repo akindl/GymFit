@@ -32,7 +32,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/listItem_dbExercise_name"
+        android:id="@+id/listItem_plan_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -46,7 +46,7 @@
 
 
     <TextView
-        android:id="@+id/listItem_dbExercise_numberOfSets"
+        android:id="@+id/listItem_plan_numberOfExercises"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -56,10 +56,10 @@
         android:textSize="14sp"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/listItem_dbExercise_name" />
+        app:layout_constraintTop_toBottomOf="@+id/listItem_plan_name" />
 
     <TextView
-        android:id="@+id/listItem_dbExercise_volume"
+        android:id="@+id/listItem_plan_numberOfSets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -68,11 +68,11 @@
         android:text="TextView"
         android:textSize="14sp"
         android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintStart_toEndOf="@+id/listItem_dbExercise_numberOfSets"
-        app:layout_constraintTop_toBottomOf="@+id/listItem_dbExercise_name" />
+        app:layout_constraintStart_toEndOf="@+id/listItem_plan_numberOfExercises"
+        app:layout_constraintTop_toBottomOf="@+id/listItem_plan_name" />
 
     <TextView
-        android:id="@+id/listItem_dbExercise_maxLoad"
+        android:id="@+id/listItem_plan_repetition_range"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -81,8 +81,8 @@
         android:text="TextView"
         android:textSize="14sp"
         android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintStart_toEndOf="@+id/listItem_dbExercise_volume"
-        app:layout_constraintTop_toBottomOf="@+id/listItem_dbExercise_name" />
+        app:layout_constraintStart_toEndOf="@+id/listItem_plan_numberOfSets"
+        app:layout_constraintTop_toBottomOf="@+id/listItem_plan_name" />
 
     <TextView
         android:id="@+id/listItem_dbExercise_notes"
@@ -98,6 +98,6 @@
         android:textSize="12sp"
         android:textStyle="italic"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/listItem_dbExercise_numberOfSets" />
+        app:layout_constraintTop_toBottomOf="@+id/listItem_plan_numberOfExercises" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

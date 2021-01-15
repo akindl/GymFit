@@ -19,10 +19,10 @@ public class ExerciseViewHolder extends RecyclerView.ViewHolder {
     public ExerciseViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        exercise_name = itemView.findViewById(R.id.listItem_dbExercise_name);
-        exercise_numberOfSets = itemView.findViewById(R.id.listItem_dbExercise_numberOfSets);
-        exercise_volume = itemView.findViewById(R.id.listItem_dbExercise_volume);
-        exercise_maxLoad = itemView.findViewById(R.id.listItem_dbExercise_maxLoad);
+        exercise_name = itemView.findViewById(R.id.listItem_plan_name);
+        exercise_numberOfSets = itemView.findViewById(R.id.listItem_plan_numberOfExercises);
+        exercise_volume = itemView.findViewById(R.id.listItem_plan_numberOfSets);
+        exercise_maxLoad = itemView.findViewById(R.id.listItem_plan_repetition_range);
         exercice_notes = itemView.findViewById(R.id.listItem_dbExercise_notes);
     }
 

@@ -19,6 +19,7 @@ import com.example.gymfit02.Fragments.TrainingFragment;
 import com.example.gymfit02.Fragments.FriendsFragment;
 import com.example.gymfit02.Fragments.ProfilFragment;
 import com.example.gymfit02.Fragments.ExercisesOverviewFragment;
+import com.example.gymfit02.Fragments.WorkoutsOverviewFragment;
 import com.example.gymfit02.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment profilFragment;
 
     private Fragment exercisesOverviewFragment;
+    private Fragment workoutsOverviewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
         friendsFragment = new FriendsFragment();
         profilFragment = new ProfilFragment();
 
-        //TODO delete this fragment verweis
+        //TODO delete this fragments
         exercisesOverviewFragment = new ExercisesOverviewFragment();
+        workoutsOverviewFragment = new WorkoutsOverviewFragment();
 
 
         fAuth = FirebaseAuth.getInstance();
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         // Toast.makeText(MainActivity.this, "Analyse", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.friends:
-                        setFragment(friendsFragment);
+                        setFragment(workoutsOverviewFragment); //setFragment(friendsFragment);
                         // Toast.makeText(MainActivity.this, "Freundesliste", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.profil:

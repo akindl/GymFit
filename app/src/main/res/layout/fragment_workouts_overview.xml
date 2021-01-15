@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackgroundLight"
-    tools:context=".Fragments.ExercisesOverviewFragment">
+    tools:context=".Fragments.WorkoutsOverviewFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/exercisesRecyclerView"
+        android:id="@+id/workoutsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -34,7 +34,7 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/my_button"
-        android:text="@string/fragment_exerciseOverview_button_createExercise"
+        android:text="@string/fragment_workoutsOverview_button_createWorkout"
         android:textColor="@color/colorPrimaryWhite"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

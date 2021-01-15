@@ -38,10 +38,10 @@
 
 
     <!-- Fragment: ExercisesOverview -->
-    <string name="fragment_exercisesOverview">Übung erstellen</string>
+    <string name="fragment_exerciseOverview_button_createExercise">Übung erstellen</string>
 
 
-    <!-- Fragment: ExercisesOverview -->
+    <!-- Fragment: CreateExercise -->
     <string name="fragment_createExercise_title">Name der Übung</string>
     <string name="fragment_createExercise_settingTitle">Welche Eigenschaft hat die neue Übung?</string>
     <string name="fragment_createExercise_settingWeight">Gewicht</string>
@@ -49,12 +49,22 @@
     <string name="fragment_createExercise_confirm">Übung erstellen</string>
 
 
-    <!-- Fragment: ExercisesOverview -->
+    <!-- Fragment: Training -->
     <string name="fragment_training_headline_plans">Trainingspläne</string>
     <string name="fragment_training_subheadline_plans">Erstelle deine eigenen Trainingseinheiten</string>
     <string name="fragment_training_headline_exercises">Übungen</string>
     <string name="fragment_training_subheadline_exercises">Wähle die Übungen für dein Training aus</string>
 
+
+    <!-- Fragment: CreatePlan -->
+    <string name="fragment_createPlan_title">Name des Trainingsplans</string>
+    <string name="fragment_createPlan_confirm">Plan erstellen</string>
+
+    <!-- Fragment: WorkoutsOverview -->
+    <string name="fragment_workoutsOverview_button_createWorkout">Workout erstellen</string>
+
+    <!-- Fragment: WorkoutExercises -->
+    <string name="fragment_workoutsExercises_button_addExercise">Übung hinzufügen</string>
 
 
 

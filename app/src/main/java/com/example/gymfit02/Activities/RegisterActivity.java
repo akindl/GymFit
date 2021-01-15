@@ -139,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             // Get the new created UserID of the user
                             userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("users").document(userID);
+                            DocumentReference documentReference = fStore.collection("Users").document(userID);
                             Map<String, Object> fUser = new HashMap<>();
 
                             fUser.put("name", mUserName.getText().toString().trim());

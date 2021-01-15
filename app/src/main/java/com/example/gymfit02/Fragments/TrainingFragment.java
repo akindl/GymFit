@@ -103,10 +103,10 @@ public class TrainingFragment extends Fragment {
         imageViewPlans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreatePlansFragment createPlansFragment = new CreatePlansFragment();
+                PlansOverviewFragment plansOverviewFragment = new PlansOverviewFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         // fragment_container_view is the FragmentContainer of all fragments in MainActivity
-                        .replace(R.id.fragment_container_view, createPlansFragment, "openCreatePlansFragment")
+                        .replace(R.id.fragment_container_view, plansOverviewFragment, "openCreatePlansFragment")
                         .addToBackStack(null)
                         .commit();
             }
