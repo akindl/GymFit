@@ -101,7 +101,7 @@
         android:layout_marginTop="44dp"
         android:layout_marginEnd="42dp"
         android:layout_marginRight="42dp"
-        android:background="@drawable/my_button"
+        android:background="@drawable/my_button_primary"
         android:text="@string/register_button_createNewAccount"
         android:textColor="@color/colorPrimaryWhite"
         android:textSize="12dp"

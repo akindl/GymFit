@@ -66,6 +66,44 @@
     <!-- Fragment: WorkoutExercises -->
     <string name="fragment_workoutsExercises_button_addExercise">Übung hinzufügen</string>
 
+    <!-- Fragment: WorkoutExercisesSinglePerformance -->
+    <string name="fragment_workoutSingleExercisePerformance_addSet">Satz hinzufügen</string>
+    <string name="fragment_workoutSingleExercisePerformance_checkExercise">Übung abhaken</string>
+    <string name="fragment_workoutSingleExercisePerformance_addNote">Notizen hinzufügen</string>
+    <string name="fragment_workoutSingleExercisePerformance_repsHint">Wdh.</string>
+    <string name="fragment_workoutSingleExercisePerformance_loadHint">Gewicht</string>
+    <string name="fragment_workoutSingleExercisePerformance_setNumberHint">Satz</string>
 
 
 </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

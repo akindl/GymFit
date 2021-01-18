@@ -7,18 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gymfit02.Adapter.WorkoutExercisesRecyclerAdapter;
+import com.example.gymfit02.Adapter.WorkoutRecyclerAdapter;
 import com.example.gymfit02.Models.DatabaseWorkoutExerciseModel;
 import com.example.gymfit02.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.StorageReference;
@@ -33,13 +37,13 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
 
     private static final String TAG = "workoutExercisesOverviewFragment";
 
+    // Firestore Connection
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private String userId;
     private FirebaseUser user;
-    private DocumentReference documentReferenceUsers;
-    private StorageReference storageReference;
 
+    // View
     private RecyclerView workoutExercisesRecyclerView;
     private Query query;
     private FirestoreRecyclerOptions<DatabaseWorkoutExerciseModel> options;
@@ -47,7 +51,9 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
 
     private Button createExerciseButton;
 
+    // Bundle Information
     private String workoutId;
+    private String executionDate;
 
     public WorkoutExercisesOverviewFragment() {
         // Required empty public constructor
@@ -68,6 +74,8 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null) {
             this.workoutId = bundle.getString("workoutId");
+            this.executionDate = bundle.getString("executionDate");
+            // Toast.makeText(getContext(), executionDate, Toast.LENGTH_SHORT).show();
         }
 
         setupFirestoreConnection();
@@ -81,10 +89,6 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_workout_exercises_overview, container, false);
 
         setupRecyclerView(rootView);
-        Log.d(TAG, "UserId = " + userId);
-        Log.d(TAG, "WorkoutId =  " + workoutId);
-        Log.d(TAG, "Exercises Collection ID =  " + fStore.collection("users")
-                .document(userId).collection("Exercises").getPath());
 
         createExerciseButton = (Button) rootView.findViewById(R.id.addWorkoutExerciseButton);
         setOpenCreateExerciseFragmentListener();
@@ -100,12 +104,8 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
         // Connect to Firebase user
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
-        fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
-
-        // Reference to get the userData
-        documentReferenceUsers = fStore.collection("users").document(userId);
-
+        fStore = FirebaseFirestore.getInstance();
     }
 
     /**
@@ -135,6 +135,35 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
         workoutExercisesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         workoutExercisesRecyclerView.setAdapter(adapter);
 
+        adapter.setOnItemClickListener(new WorkoutExercisesRecyclerAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+
+                String deviceName = (String) documentSnapshot.get("deviceName");
+                String exerciseName = (String) documentSnapshot.get("exerciseName");
+                String notes = (String) documentSnapshot.get("notes");
+
+                Bundle bundle = new Bundle();
+                bundle.putString("workoutId", workoutId);
+                bundle.putString("executionDate", executionDate);
+                bundle.putString("deviceName", deviceName);
+                bundle.putString("exerciseName", exerciseName);
+                bundle.putString("notes", notes);
+
+                WorkoutSingleExercisePerformanceFragment workoutSingleExercisePerformanceFragment = new WorkoutSingleExercisePerformanceFragment();
+                workoutSingleExercisePerformanceFragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        // fragment_container_view is the FragmentContainer of all fragments in MainActivity
+                        .replace(R.id.fragment_container_view, workoutSingleExercisePerformanceFragment, "openWorkoutSingleExercisePerformanceFragment")
+                        .addToBackStack(null)
+                        .commit();
+            }
+
+            @Override
+            public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
+            }
+        });
     }
 
 

@@ -3,6 +3,9 @@
     <color name="colorPrimaryWhite">#ffffff</color>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#8B98A4</color>
+    <color name="colorDarkGrey">#373E45</color>
+    <color name="colorLightGrey">#A3ABB3</color>
+    <color name="colorLighterGrey">#D2D3D5</color>
     <color name="colorGreen">#71982F</color>
     <color name="colorRed">#CC0000</color>
     <color name ="colorBackgroundDark">#01223E</color>

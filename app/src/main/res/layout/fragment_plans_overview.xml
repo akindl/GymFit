@@ -37,7 +37,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/my_button"
+        android:background="@drawable/my_button_primary"
         android:text="@string/fragment_createPlan_confirm"
         android:textColor="@color/colorPrimaryWhite"
         android:textSize="12sp"

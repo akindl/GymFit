@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingLeft="4dp"
+    android:paddingBottom="5dp"
+    android:paddingRight="8dp">
+
+
+    <TextView
+        android:id="@+id/textView_workoutExercisePerformance_setNumber"
+        android:layout_width="30dp"
+        android:textAlignment="center"
+        android:layout_height="35dp"
+        android:padding="7dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:ems="5"
+        android:inputType="numberDecimal"
+        android:text="0"
+        android:gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/editText_workoutExercisePerformance_reps"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:textAlignment="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/my_round_grey_bg"
+        android:layout_weight="1"
+        android:ems="5"
+        android:hint="@string/fragment_workoutSingleExercisePerformance_repsHint"
+        android:inputType="numberDecimal"
+        android:text=""
+        tools:ignore="RtlCompat" />
+
+    <EditText
+        android:id="@+id/editText_workoutExercisePerformance_load"
+        android:layout_width="90dp"
+        android:layout_height="35dp"
+        android:textAlignment="center"
+        android:padding="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/my_round_grey_bg"
+        android:layout_weight="1"
+        android:ems="5"
+        android:inputType="numberDecimal"
+        android:text=""
+        android:hint="@string/fragment_workoutSingleExercisePerformance_loadHint"
+        tools:ignore="RtlCompat" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/my_round_grey_bg"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <Spinner
+            android:id="@+id/spinner_workoutExercisePerformance_rpe"
+            android:ems="5"
+            android:layout_width="120dp"
+            android:layout_height="35dp"
+            android:layout_weight="1" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView_workoutExercisePerformance_remove"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:layout_marginRight="5dp"
+        app:srcCompat="@drawable/ic_baseline_close_24"
+        tools:ignore="VectorDrawableCompat"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>

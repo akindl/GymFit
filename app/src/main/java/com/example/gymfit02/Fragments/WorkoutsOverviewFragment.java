@@ -15,6 +15,7 @@ import com.example.gymfit02.Adapter.WorkoutRecyclerAdapter;
 import com.example.gymfit02.Models.DatabaseWorkoutModel;
 import com.example.gymfit02.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -22,6 +23,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.StorageReference;
+
+import java.sql.Time;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,7 +108,7 @@ public class WorkoutsOverviewFragment extends Fragment {
         // Query
         query = fStore.collection("Users")
                 .document(userId).collection("Workouts")
-                .orderBy("name", Query.Direction.ASCENDING); //alphabetisch sortiert
+                .orderBy("executionDate", Query.Direction.DESCENDING); // Newest on top
 
 
 
@@ -127,8 +131,10 @@ public class WorkoutsOverviewFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
 
                 String workoutId = documentSnapshot.getId();
+                Timestamp executionDate = (Timestamp) documentSnapshot.get("executionDate");
                 Bundle bundle = new Bundle();
                 bundle.putString("workoutId", workoutId);
+                bundle.putString("executionDate", executionDate.toDate().toString());
 
                 WorkoutExercisesOverviewFragment workoutExercisesOverviewFragment = new WorkoutExercisesOverviewFragment();
                 workoutExercisesOverviewFragment.setArguments(bundle);

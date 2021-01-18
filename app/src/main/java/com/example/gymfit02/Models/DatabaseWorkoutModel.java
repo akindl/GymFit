@@ -8,7 +8,7 @@ public class DatabaseWorkoutModel {
 
 
     private String name;
-    private Date executionDate;
+    private Timestamp executionDate;
 
 
 
@@ -20,7 +20,7 @@ public class DatabaseWorkoutModel {
 
     public DatabaseWorkoutModel(String name, Timestamp executionDate) {
         this.name = name;
-        this.executionDate = executionDate.toDate();
+        this.executionDate = executionDate;
     }
 
 
@@ -31,7 +31,7 @@ public class DatabaseWorkoutModel {
     }
 
     public String getExecutionDate() {
-        return executionDate.toString();
+        return executionDate.toDate().toString();
     }
 
 
@@ -41,7 +41,7 @@ public class DatabaseWorkoutModel {
         this.name = name;
     }
 
-    public void setExecutionDate(Date executionDate) {
+    public void setExecutionDate(Timestamp executionDate) {
         this.executionDate = executionDate;
     }
 }
