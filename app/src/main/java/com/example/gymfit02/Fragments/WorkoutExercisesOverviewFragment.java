@@ -7,25 +7,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gymfit02.Adapter.WorkoutExercisesRecyclerAdapter;
-import com.example.gymfit02.Adapter.WorkoutRecyclerAdapter;
+import com.example.gymfit02.Adapter.WorkoutExercisePerformanceRecyclerAdapter;
+import com.example.gymfit02.Models.DatabaseExercisePerformanceModel;
 import com.example.gymfit02.Models.DatabaseWorkoutExerciseModel;
 import com.example.gymfit02.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.Timestamp;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 /**
@@ -35,7 +38,7 @@ import com.google.firebase.storage.StorageReference;
  */
 public class WorkoutExercisesOverviewFragment extends Fragment {
 
-    private static final String TAG = "workoutExercisesOverviewFragment";
+    private static final String TAG = "exercisesOverviewFragment";
 
     // Firestore Connection
     private FirebaseAuth fAuth;
@@ -47,7 +50,7 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
     private RecyclerView workoutExercisesRecyclerView;
     private Query query;
     private FirestoreRecyclerOptions<DatabaseWorkoutExerciseModel> options;
-    private WorkoutExercisesRecyclerAdapter adapter;
+    private WorkoutExercisePerformanceRecyclerAdapter adapter;
 
     private Button createExerciseButton;
 
@@ -106,6 +109,8 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
         user = fAuth.getCurrentUser();
         userId = fAuth.getCurrentUser().getUid();
         fStore = FirebaseFirestore.getInstance();
+
+
     }
 
     /**
@@ -115,11 +120,19 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
     private void setupRecyclerView(View view) {
 
         // Query
+        // TODO Query returns right ExercisesPerformances but the names of the exercises are all the same??
+        // query = fStore.collectionGroup("ExercisePerformances").whereEqualTo("workoutId", workoutId);
+
+
 
         query = fStore.collection("Users")
                 .document(userId).collection("Exercises")
                 .whereArrayContains("workouts", workoutId);
                 //.orderBy("exerciseName", Query.Direction.ASCENDING); //alphabetisch sortiert
+
+
+        // TODO .groupCollection("ExercisePerformances").equalTo("workoutId", workoutId); 
+
 
 
         // RecyclerOptions
@@ -128,36 +141,78 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
                 .setQuery(query, DatabaseWorkoutExerciseModel.class)
                 .build();
 
-        adapter = new WorkoutExercisesRecyclerAdapter(options);
+        adapter = new WorkoutExercisePerformanceRecyclerAdapter(options);
 
         workoutExercisesRecyclerView = (RecyclerView) view.findViewById(R.id.workoutExercisesRecyclerView);
         workoutExercisesRecyclerView.setHasFixedSize(true);
         workoutExercisesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         workoutExercisesRecyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new WorkoutExercisesRecyclerAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new WorkoutExercisePerformanceRecyclerAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
 
-                String deviceName = (String) documentSnapshot.get("deviceName");
-                String exerciseName = (String) documentSnapshot.get("exerciseName");
-                String notes = (String) documentSnapshot.get("notes");
+                final String deviceName = (String) documentSnapshot.get("deviceName");
+                final String exerciseName = (String) documentSnapshot.get("exerciseName");
+                final String notes = (String) documentSnapshot.get("notes");
+                final String exerciseId = (String) documentSnapshot.getId();
 
-                Bundle bundle = new Bundle();
-                bundle.putString("workoutId", workoutId);
-                bundle.putString("executionDate", executionDate);
-                bundle.putString("deviceName", deviceName);
-                bundle.putString("exerciseName", exerciseName);
-                bundle.putString("notes", notes);
+                // Get the ExercisePerformance Document or create a new one
 
-                WorkoutSingleExercisePerformanceFragment workoutSingleExercisePerformanceFragment = new WorkoutSingleExercisePerformanceFragment();
-                workoutSingleExercisePerformanceFragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        // fragment_container_view is the FragmentContainer of all fragments in MainActivity
-                        .replace(R.id.fragment_container_view, workoutSingleExercisePerformanceFragment, "openWorkoutSingleExercisePerformanceFragment")
-                        .addToBackStack(null)
-                        .commit();
+                final String[] performanceId = new String[1];
+
+                fStore.collection("Users")
+                        .document(userId).collection("Exercises")
+                        .document(exerciseId).collection("ExercisePerformances")
+                        .whereEqualTo("workoutId", workoutId)
+                        .limit(1)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @SuppressLint("LongLogTag")
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document: task.getResult()) {
+                                        performanceId[0] = document.getId();
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        if(performanceId.length == 0) {
+                                            CollectionReference exercisePerformanceRef = fStore.collection("Users")
+                                                    .document(userId).collection("Exercises")
+                                                    .document(exerciseId).collection("ExercisePerformances");
+                                            FieldValue performanceDate = FieldValue.serverTimestamp();
+                                            exercisePerformanceRef.add(new DatabaseExercisePerformanceModel(0, "",
+                                                    performanceDate, 0, workoutId, 0));
+
+
+
+                                        }
+
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("workoutId", workoutId);
+                                        bundle.putString("executionDate", executionDate);
+                                        bundle.putString("deviceName", deviceName);
+                                        bundle.putString("exerciseName", exerciseName);
+                                        bundle.putString("exerciseId", exerciseId);
+                                        bundle.putString("notes", notes);
+                                        bundle.putString("performanceId", performanceId[0]);
+
+
+                                        WorkoutSingleExercisePerformanceFragment workoutSingleExercisePerformanceFragment = new WorkoutSingleExercisePerformanceFragment();
+                                        workoutSingleExercisePerformanceFragment.setArguments(bundle);
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                // fragment_container_view is the FragmentContainer of all fragments in MainActivity
+                                                .replace(R.id.fragment_container_view, workoutSingleExercisePerformanceFragment, "openWorkoutSingleExercisePerformanceFragment")
+                                                .addToBackStack(null)
+                                                .commit();
+                                    }
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
+
+
             }
 
             @Override

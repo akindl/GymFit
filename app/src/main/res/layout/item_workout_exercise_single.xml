@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:text="TextView"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp"
@@ -51,13 +51,58 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:text="TextView"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/listItem_workout_exercise_name"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listItem_workout_exercise_setCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/ic_baseline_library_check_sets"
+        android:drawablePadding="2dp"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/listItem_workout_exercise_name" />
+
+    <TextView
+        android:id="@+id/listItem_workout_device_oneRepMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/ic_baseline_star_24"
+        android:drawablePadding="2dp"
+        app:layout_constraintStart_toEndOf="@+id/listItem_workout_exercise_setCount"
+        app:layout_constraintTop_toBottomOf="@+id/listItem_workout_device_name" />
+
+    <TextView
+        android:id="@+id/listItem_workout_device_totalVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/ic_baseline_total_volume"
+        android:drawablePadding="2dp"
+        app:layout_constraintStart_toEndOf="@+id/listItem_workout_device_oneRepMax"
+        app:layout_constraintTop_toBottomOf="@+id/listItem_workout_device_name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -90,11 +90,11 @@ public class ProfilFragment extends Fragment {
         fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
         // Reference to get the userData like name and email
-        documentReferenceUsers = fStore.collection("users").document(userId);
+        documentReferenceUsers = fStore.collection("Users").document(userId);
         // Reference to Upload the profileImage
         storageReference = FirebaseStorage.getInstance().getReference();
         //Reference to the uploaded profileImage of the current user
-        profileImageRef = storageReference.child("users/" + userId + "profileImage.jpg");
+        profileImageRef = storageReference.child("Users/" + userId + "profileImage.jpg");
     }
 
     @Override
@@ -172,7 +172,7 @@ public class ProfilFragment extends Fragment {
      */
     private void uploadImageToFirebase(Uri imageUri) {
 
-        final StorageReference fileRef = storageReference.child("users/" + userId + "profileImage.jpg");
+        final StorageReference fileRef = storageReference.child("Users/" + userId + "profileImage.jpg");
         fileRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

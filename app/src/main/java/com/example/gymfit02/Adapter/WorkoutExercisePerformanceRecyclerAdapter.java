@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gymfit02.Models.DatabaseWorkoutExerciseModel;
-import com.example.gymfit02.Models.DatabaseWorkoutModel;
 import com.example.gymfit02.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -17,12 +16,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 
 
-public class WorkoutExercisesRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseWorkoutExerciseModel, WorkoutExercisesRecyclerAdapter.WorkoutExercisesViewHolder> {
+public class WorkoutExercisePerformanceRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseWorkoutExerciseModel, WorkoutExercisePerformanceRecyclerAdapter.WorkoutExercisesViewHolder> {
 
 
     private OnItemClickListener listener;
 
-    public WorkoutExercisesRecyclerAdapter(@NonNull FirestoreRecyclerOptions<DatabaseWorkoutExerciseModel> options) {
+    public WorkoutExercisePerformanceRecyclerAdapter(@NonNull FirestoreRecyclerOptions<DatabaseWorkoutExerciseModel> options) {
         super(options);
     }
 
@@ -37,6 +36,10 @@ public class WorkoutExercisesRecyclerAdapter extends FirestoreRecyclerAdapter<Da
     protected void onBindViewHolder(@NonNull WorkoutExercisesViewHolder holder, final int position, @NonNull DatabaseWorkoutExerciseModel model) {
         holder.getExercise_name().setText(model.getExerciseName());
         holder.getDevice_name().setText(model.getDeviceName());
+        // holder.getSet_count().setText(model.get);
+        // holder.getDevice_name().setText(model.getDeviceName());
+        // holder.getDevice_name().setText(model.getDeviceName());
+
     }
 
     public void deleteItem(int position) {
@@ -68,6 +71,10 @@ public class WorkoutExercisesRecyclerAdapter extends FirestoreRecyclerAdapter<Da
 
         private TextView exercise_name;
         private TextView device_name;
+        private TextView set_count;
+        private TextView oneRepMax;
+        private TextView totalVolume;
+
 
 
         public WorkoutExercisesViewHolder(@NonNull final View itemView) {
@@ -115,6 +122,17 @@ public class WorkoutExercisesRecyclerAdapter extends FirestoreRecyclerAdapter<Da
             return device_name;
         }
 
+        public TextView getSet_count() {
+            return set_count;
+        }
+
+        public TextView getOneRepMax() {
+            return oneRepMax;
+        }
+
+        public TextView getTotalVolume() {
+            return totalVolume;
+        }
 
         // SETTER
 
@@ -125,6 +143,18 @@ public class WorkoutExercisesRecyclerAdapter extends FirestoreRecyclerAdapter<Da
 
         public void setDevice_name(TextView device_name) {
             this.device_name = device_name;
+        }
+
+        public void setSet_count(TextView set_count) {
+            this.set_count = set_count;
+        }
+
+        public void setOneRepMax(TextView oneRepMax) {
+            this.oneRepMax = oneRepMax;
+        }
+
+        public void setTotalVolume(TextView totalVolume) {
+            this.totalVolume = totalVolume;
         }
     }
 

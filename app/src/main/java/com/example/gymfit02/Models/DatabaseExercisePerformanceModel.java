@@ -1,68 +1,82 @@
 package com.example.gymfit02.Models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 
 public class DatabaseExercisePerformanceModel {
 
-    private HashMap<String, Object> singleSet;
-    private ArrayList<Object> sets;
+    private int oneRepMax;
     private String notes;
-    private Date performanceDate;
-    private Long totalVolume;
+    private FieldValue performanceDate;
+    private int totalVolume;
+    private String workoutId;
+    private int setCount;
 
-
-    // CONSTRUCTOR
-
-    public DatabaseExercisePerformanceModel(HashMap<String, Object> singleSet, ArrayList<Object> sets) {
-        this.singleSet = singleSet;
-        this.sets = sets;
+    public DatabaseExercisePerformanceModel() {
+        // no argument constructor required for ProGuard (compress and optimize data)
     }
+
+    public DatabaseExercisePerformanceModel(int oneRepMax, String notes, FieldValue performanceDate, int totalVolume, String workoutId, int setCount) {
+        this.oneRepMax = oneRepMax;
+        this.notes = notes;
+        this.performanceDate = performanceDate;
+        this.totalVolume = totalVolume;
+        this.workoutId = workoutId;
+        this.setCount = setCount;
+    }
+
 
     // GETTER
 
-    public HashMap<String, Object> getSingleSet() {
-        return singleSet;
-    }
 
-    public ArrayList<Object> getSets() {
-        return sets;
+    public int getOneRepMax() {
+        return oneRepMax;
     }
 
     public String getNotes() {
         return notes;
     }
 
-    public Date getPerformanceDate() {
+    public FieldValue getPerformanceDate() {
         return performanceDate;
     }
 
-    public Long getTotalVolume() {
+    public int getTotalVolume() {
         return totalVolume;
     }
 
+    public String getWorkoutId() {
+        return workoutId;
+    }
+
+    public int getSetCount() {
+        return setCount;
+    }
 
     // SETTER
 
 
-    public void setSingleSet(HashMap<String, Object> singleSet) {
-        this.singleSet = singleSet;
-    }
-
-    public void setSets(ArrayList<Object> sets) {
-        this.sets = sets;
+    public void setOneRepMax(int oneRepMax) {
+        this.oneRepMax = oneRepMax;
     }
 
     public void setNotes(String notes) {
         this.notes = notes;
     }
 
-    public void setPerformanceDate(Date performanceDate) {
+    public void setPerformanceDate(FieldValue performanceDate) {
         this.performanceDate = performanceDate;
     }
 
-    public void setTotalVolume(Long totalVolume) {
+    public void setTotalVolume(int totalVolume) {
         this.totalVolume = totalVolume;
+    }
+
+    public void setWorkoutId(String workoutId) {
+        this.workoutId = workoutId;
+    }
+
+    public void setSetCount(int setCount) {
+        this.setCount = setCount;
     }
 }

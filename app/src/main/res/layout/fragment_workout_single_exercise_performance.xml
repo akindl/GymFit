@@ -66,16 +66,21 @@
 
         <TextView
             android:id="@+id/textView_workoutExercisePerformance_notes"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:scrollHorizontally="false"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:text="Notizen"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:ellipsize="none"
+            android:scrollHorizontally="false"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -101,36 +106,19 @@
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/my_button_secondary"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/my_button_primary"
             android:gravity="center"
             android:text="@string/fragment_workoutSingleExercisePerformance_addSet"
             android:textColor="@color/colorPrimary"
             android:textSize="12sp"
             app:iconGravity="textStart"
-            app:layout_constraintBottom_toTopOf="@+id/button_workoutExercisePerformance_exercisePerformanceCheck"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-        <Button
-            android:id="@+id/button_workoutExercisePerformance_exercisePerformanceCheck"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/my_button_primary"
-            android:text="@string/fragment_workoutSingleExercisePerformance_checkExercise"
-            android:textColor="@color/colorPrimaryWhite"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
+
+
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -147,8 +135,8 @@
             app:layout_constraintStart_toStartOf="parent">
 
 
-            <EditText
-                android:id="@+id/editText_workoutExercisePerformance_setNumber"
+            <NumberPicker
+                android:id="@+id/numberPicker_workoutExercisePerformance_setNumber"
                 android:layout_width="80dp"
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
