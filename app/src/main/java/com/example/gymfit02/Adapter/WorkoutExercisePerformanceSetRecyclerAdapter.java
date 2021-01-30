@@ -39,7 +39,7 @@ public class WorkoutExercisePerformanceSetRecyclerAdapter extends FirestoreRecyc
                                     final int position,
                                     @NonNull DatabaseExercisePerformanceSetModel model) {
 
-        holder.getSetNumber().setText(String.valueOf(model.getSetNumber()));
+        // holder.getSetNumber().setText(String.valueOf(model.getSetNumber()));
         holder.getSetReps().setText(String.valueOf(model.getReps()));
         holder.getSetLoad().setText(String.valueOf(model.getLoad()));
         holder.getSetRpe().setText(model.getRpe());
@@ -84,7 +84,7 @@ public class WorkoutExercisePerformanceSetRecyclerAdapter extends FirestoreRecyc
         public ExercisePerformanceSetViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            setNumber = itemView.findViewById(R.id.textView_workoutExercisePerformanceSingleSet_number);
+            // setNumber = itemView.findViewById(R.id.textView_workoutExercisePerformanceSingleSet_number);
             setReps = itemView.findViewById(R.id.textView_workoutExercisePerformanceSingleSet_reps);
             setLoad = itemView.findViewById(R.id.textView_workoutExercisePerformanceSingleSet_load);
             setRpe = itemView.findViewById(R.id.textView_workoutExercisePerformanceSingleSet_rpe);
@@ -123,9 +123,6 @@ public class WorkoutExercisePerformanceSetRecyclerAdapter extends FirestoreRecyc
 
         // GETTER
 
-        public TextView getSetNumber() {
-            return setNumber;
-        }
 
         public TextView getSetLoad() {
             return setLoad;
@@ -146,10 +143,6 @@ public class WorkoutExercisePerformanceSetRecyclerAdapter extends FirestoreRecyc
 
 
         // SETTER
-
-        public void setSetNumber(TextView setNumber) {
-            this.setNumber = setNumber;
-        }
 
         public void setSetLoad(TextView setLoad) {
             this.setLoad = setLoad;

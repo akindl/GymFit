@@ -12,6 +12,7 @@
     android:paddingRight="8dp">
 
 
+    <!--
     <TextView
         android:id="@+id/textView_workoutExercisePerformanceSingleSet_number"
         android:layout_width="50dp"
@@ -27,9 +28,11 @@
         android:hint="setNum"
         tools:ignore="RtlCompat" />
 
+        -->
+
     <TextView
         android:id="@+id/textView_workoutExercisePerformanceSingleSet_reps"
-        android:layout_width="50dp"
+        android:layout_width="60dp"
         android:layout_height="35dp"
         android:textAlignment="center"
         android:padding="8dp"
@@ -44,7 +47,7 @@
 
     <TextView
         android:id="@+id/textView_workoutExercisePerformanceSingleSet_load"
-        android:layout_width="50dp"
+        android:layout_width="60dp"
         android:layout_height="35dp"
         android:textAlignment="center"
         android:padding="8dp"

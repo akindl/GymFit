@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,7 +37,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -81,7 +79,7 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
     // Views to add new set
     private Button addSetButton;
     private Spinner rpeSpinner;
-    private NumberPicker setNumberNumberPicker;
+    // private NumberPicker setNumberNumberPicker;
     private EditText repsEditText;
     private EditText loadEditText;
     private List<String> rpeSpinnerList = new ArrayList<>();
@@ -91,6 +89,7 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
     private Query query;
     private FirestoreRecyclerOptions<DatabaseExercisePerformanceSetModel> options;
     private WorkoutExercisePerformanceSetRecyclerAdapter adapter;
+    private int setCounter = 0;
 
     // Firestore dataReferences
     private DocumentReference exercisePerformanceReference;
@@ -130,13 +129,14 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
         setupFirestoreConnection();
 
+
         // Get reference to the exercisePerformance to update oneRepMax and totalVolume
         exercisePerformanceReference = fStore.collection("Users")
                 .document(userId).collection("Exercises")
                 .document(exerciseId).collection("ExercisePerformances")
                 .document(performanceId);
 
-
+        setupSetCounter();
     }
 
     @Override
@@ -145,7 +145,7 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_workout_single_exercise_performance, container, false);
         // tell host activity that the fragment wants to add some menu options
         setHasOptionsMenu(true);
-        
+
         getActivity().setTitle("Übung: " + exerciseName);
 
 
@@ -165,9 +165,9 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
         setNewSetPerformanceListener();
 
         rpeSpinner = (Spinner) rootView.findViewById(R.id.spinner_workoutExercisePerformance_rpe);
-        setNumberNumberPicker = (NumberPicker) rootView.findViewById(R.id.numberPicker_workoutExercisePerformance_setNumber);
-        setNumberNumberPicker.setMinValue(1);
-        setNumberNumberPicker.setMaxValue(20);
+        // setNumberNumberPicker = (NumberPicker) rootView.findViewById(R.id.numberPicker_workoutExercisePerformance_setNumber);
+        // setNumberNumberPicker.setMinValue(1);
+        // setNumberNumberPicker.setMaxValue(20);
 
         repsEditText = (EditText) rootView.findViewById(R.id.editText_workoutExercisePerformance_reps);
         loadEditText = (EditText) rootView.findViewById(R.id.editText_workoutExercisePerformance_load);
@@ -179,6 +179,33 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    /**
+     * The setCounter generates iterative setNumber values
+     * The method initialize the setCounter
+     */
+    private void setupSetCounter() {
+
+        fStore.collection("Users")
+                .document(userId).collection("Exercises")
+                .document(exerciseId).collection("ExercisePerformances")
+                .document(performanceId).collection("PerformanceSets")
+                .orderBy("setNumber", Query.Direction.DESCENDING).limit(1)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    DatabaseExercisePerformanceSetModel singleSetWithHighestSetNumber = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
+                    setCounter = singleSetWithHighestSetNumber.getSetNumber();
+                } else {
+                    setCounter = 0;
+                }
+
+            }
+        });
+
     }
 
 
@@ -203,6 +230,79 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
     private void saveExercisePerformance() {
 
+        fStore.collection("Users")
+            .document(userId).collection("Exercises")
+            .document(exerciseId).collection("ExercisePerformances")
+            .document(performanceId).collection("PerformanceSets")
+            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        checkExerciseSetToTrue(document);
+                    }
+
+                }
+            }
+        });
+
+    }
+
+    /**
+     * Iterate through the list and update all "check" entrys to true
+     */
+    private void checkExerciseSetToTrue(DocumentSnapshot documentSnapshot) {
+
+        final DatabaseExercisePerformanceSetModel singleSet = documentSnapshot.toObject(DatabaseExercisePerformanceSetModel.class);
+        final DocumentReference singleSetReference = documentSnapshot.getReference();
+        boolean check = singleSet.getCheck();
+
+        if(check == false) {
+            documentSnapshot.getReference().update("check", true);
+
+                exercisePerformanceReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        // update totalVolume in exercisePerformance document
+                        totalVolume = (Long) documentSnapshot.get("totalVolume");
+                        int weight = singleSet.getLoad();
+                        int reps = singleSet.getReps();
+                        totalVolume += weight * reps;
+                        exercisePerformanceReference.update("totalVolume", totalVolume);
+
+                        // TODO setCount wird im exercisePerformance document nicht erhöht??
+                        //  die richtige Zahl wird geladen, dann aber mit der ersten überschrieben...
+                        // update setNumber in exercisePerformance document
+                        setCount = (Long) documentSnapshot.get("setCount");
+                        setCount += 1;
+                        exercisePerformanceReference.update("setCount", setCount);
+
+                        // update oneRepMax in performanceSet document
+                        int oneRepMax = calcOneRepMax(weight, reps);
+                        singleSetReference.update("oneRepMax", oneRepMax);
+
+                        // update oneRepMax in exercisePerformance document
+                        fStore.collection("Users")
+                                .document(userId).collection("Exercises")
+                                .document(exerciseId).collection("ExercisePerformances")
+                                .document(performanceId).collection("PerformanceSets")
+                                .orderBy("oneRepMax", Query.Direction.DESCENDING).limit(1)
+                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
+                                DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
+                                exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
+                            }
+                        });
+                    }
+                });
+
+                Log.d(TAG, "DocumentSnapshot successfully updated!");
+
+
+        }
 
     }
 
@@ -218,7 +318,7 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
                     return;
                 }
 
-                int setNumber = setNumberNumberPicker.getValue();
+                setCounter += 1;
                 int reps = Integer.parseInt(repsEditText.getText().toString());
                 int load = Integer.parseInt(loadEditText.getText().toString());
                 String rpe = rpeSpinner.getSelectedItem().toString();
@@ -229,11 +329,10 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
                         .document(performanceId).collection("PerformanceSets");
 
 
-                performanceSetsRef.add(new DatabaseExercisePerformanceSetModel(Integer.valueOf(setNumber), Integer.valueOf(reps),
+                performanceSetsRef.add(new DatabaseExercisePerformanceSetModel(setCounter, Integer.valueOf(reps),
                         Integer.valueOf(load), rpe, 0, false));
                 load = 0;
                 reps = 0;
-                //setNumber += 1;
             }
         });
     }
@@ -453,8 +552,12 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
                                                 @Override
                                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                                     // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
-                                                    DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
-                                                    exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
+                                                    if (!queryDocumentSnapshots.isEmpty()) {
+                                                        DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
+                                                        exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
+                                                    } else {
+                                                        exercisePerformanceReference.update("oneRepMax", 0);
+                                                    }
                                                 }
                                             });
                                         }

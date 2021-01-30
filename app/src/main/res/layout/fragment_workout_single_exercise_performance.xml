@@ -134,7 +134,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-
+            <!---
             <NumberPicker
                 android:id="@+id/numberPicker_workoutExercisePerformance_setNumber"
                 android:layout_width="80dp"
@@ -150,6 +150,8 @@
                 android:textAlignment="center"
                 android:textSize="14sp"
                 tools:ignore="RtlCompat" />
+
+                -->
 
             <EditText
                 android:id="@+id/editText_workoutExercisePerformance_reps"
