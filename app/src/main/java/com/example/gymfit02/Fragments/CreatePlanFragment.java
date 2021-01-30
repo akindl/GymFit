@@ -48,6 +48,8 @@ public class CreatePlanFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_create_plan, container, false);
 
+        getActivity().setTitle("Neuen Plan erstellen");
+
         return rootView;
     }
 

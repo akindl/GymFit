@@ -1,16 +1,15 @@
 package com.example.gymfit02.Fragments;
 
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.gymfit02.Database.Plan;
 import com.example.gymfit02.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,8 +34,8 @@ public class TrainingFragment extends Fragment {
     private StorageReference storageReference;
 
     // Elements
+    private ImageView imageViewWorkouts;
     private ImageView imageViewPlans;
-    private ImageView imageViewExercises;
 
 
     public TrainingFragment() {
@@ -68,11 +67,12 @@ public class TrainingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_training, container, false);
+        getActivity().setTitle("GymFit");
 
+        imageViewWorkouts = (ImageView) rootView.findViewById(R.id.bg_workouts);
+        setImageViewWorkoutsToOpenWorkoutsOverviewFragmentListener();
         imageViewPlans = (ImageView) rootView.findViewById(R.id.bg_plans);
-        setImageViewPlansToOpenCreatePlansFragmentListener();
-        imageViewExercises = (ImageView) rootView.findViewById(R.id.bg_exercises);
-        setImageViewPlansToOpenExercisesOverviewFragmentListener();
+        setImageViewPlansToOpenPlansOverviewFragmentListener();
 
 
         return rootView;
@@ -99,14 +99,14 @@ public class TrainingFragment extends Fragment {
     /**
      * When user click on the button "Trainingspläne" he will direct to CreatePlansFragment
      */
-    public void setImageViewPlansToOpenCreatePlansFragmentListener() {
-        imageViewPlans.setOnClickListener(new View.OnClickListener() {
+    public void setImageViewWorkoutsToOpenWorkoutsOverviewFragmentListener() {
+        imageViewWorkouts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PlansOverviewFragment plansOverviewFragment = new PlansOverviewFragment();
+                WorkoutsOverviewFragment workoutsOverviewFragment = new WorkoutsOverviewFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         // fragment_container_view is the FragmentContainer of all fragments in MainActivity
-                        .replace(R.id.fragment_container_view, plansOverviewFragment, "openCreatePlansFragment")
+                        .replace(R.id.fragment_container_view, workoutsOverviewFragment, "")
                         .addToBackStack(null)
                         .commit();
             }
@@ -118,14 +118,14 @@ public class TrainingFragment extends Fragment {
     /**
      * When user click on the button "Übungen" he will direct to ExercisesOverviewFragment
      */
-    public void setImageViewPlansToOpenExercisesOverviewFragmentListener() {
-        imageViewExercises.setOnClickListener(new View.OnClickListener() {
+    public void setImageViewPlansToOpenPlansOverviewFragmentListener() {
+        imageViewPlans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ExercisesOverviewFragment exercisesOverviewFragment = new ExercisesOverviewFragment();
+                PlansOverviewFragment plansOverviewFragment = new PlansOverviewFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         // fragment_container_view is the FragmentContainer of all fragments in MainActivity
-                        .replace(R.id.fragment_container_view, exercisesOverviewFragment, "openExercisesOverviewFragment")
+                        .replace(R.id.fragment_container_view, plansOverviewFragment, "")
                         .addToBackStack(null)
                         .commit();
             }

@@ -29,12 +29,14 @@ public class ExerciseRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseEx
 
     @Override
     protected void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position, @NonNull DatabaseExerciseModel model) {
+        /*
         holder.getExercise_name().setText(model.getName());
         holder.getExercise_numberOfSets().setText(model.getNumberOfSets());
         holder.getExercise_volume().setText(model.getVolume());
         holder.getExercise_maxLoad().setText(model.getMaxLoad());
         holder.getExercice_notes().setText(model.getNotes());
 
+         */
         }
 }
 

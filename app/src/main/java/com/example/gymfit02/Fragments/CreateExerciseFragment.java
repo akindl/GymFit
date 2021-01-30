@@ -53,12 +53,6 @@ public class CreateExerciseFragment extends Fragment {
     public CreateExerciseFragment() {
     }
 
-    public static CreateExerciseFragment newInstance(String param1, String param2) {
-        CreateExerciseFragment fragment = new CreateExerciseFragment();
-
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +64,8 @@ public class CreateExerciseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_exercise, container, false);
+
+        getActivity().setTitle("Neue Übung erstellen");
 
 
         createExerciseBtn = (Button) rootView.findViewById(R.id.createExerciseConfirm);

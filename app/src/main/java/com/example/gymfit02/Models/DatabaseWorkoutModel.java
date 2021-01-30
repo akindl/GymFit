@@ -2,8 +2,6 @@ package com.example.gymfit02.Models;
 
 import com.google.firebase.Timestamp;
 
-import java.util.Date;
-
 public class DatabaseWorkoutModel {
 
 
@@ -30,8 +28,8 @@ public class DatabaseWorkoutModel {
         return name;
     }
 
-    public String getExecutionDate() {
-        return executionDate.toDate().toString();
+    public Timestamp getExecutionDate() {
+        return executionDate;
     }
 
 

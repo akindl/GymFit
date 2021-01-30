@@ -101,6 +101,7 @@ public class ProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profil, container, false);
+        getActivity().setTitle("Dein Profil");
 
         // Set Logout Button Listener
         mLogoutBtn = (Button) rootView.findViewById(R.id.buttonLogout);

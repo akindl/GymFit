@@ -19,6 +19,7 @@ import com.example.gymfit02.Fragments.TrainingFragment;
 import com.example.gymfit02.Fragments.FriendsFragment;
 import com.example.gymfit02.Fragments.ProfilFragment;
 import com.example.gymfit02.Fragments.ExercisesOverviewFragment;
+import com.example.gymfit02.Fragments.WorkoutCreationFragment;
 import com.example.gymfit02.Fragments.WorkoutsOverviewFragment;
 import com.example.gymfit02.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment exercisesOverviewFragment;
     private Fragment workoutsOverviewFragment;
+    private Fragment workoutCreationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO delete this fragments
         exercisesOverviewFragment = new ExercisesOverviewFragment();
         workoutsOverviewFragment = new WorkoutsOverviewFragment();
+        workoutCreationFragment = new WorkoutCreationFragment();
 
 
         fAuth = FirebaseAuth.getInstance();
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.dashboard:
-                        setFragment(trainingFragment); // trainingFragment wieder einsetzen | exercisesOverviewFragment
+                        setFragment(trainingFragment);
                         // Toast.makeText(MainActivity.this, "Training", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.analyse:
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                         // Toast.makeText(MainActivity.this, "Analyse", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.friends:
-                        setFragment(workoutsOverviewFragment); //setFragment(friendsFragment);
+                        setFragment(friendsFragment);
                         // Toast.makeText(MainActivity.this, "Freundesliste", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.profil:

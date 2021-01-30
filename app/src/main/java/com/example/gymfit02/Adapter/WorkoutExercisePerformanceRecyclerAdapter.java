@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gymfit02.Models.DatabaseWorkoutExerciseModel;
+import com.example.gymfit02.Models.DatabaseExercisePerformanceModel;
 import com.example.gymfit02.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -16,12 +16,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 
 
-public class WorkoutExercisePerformanceRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseWorkoutExerciseModel, WorkoutExercisePerformanceRecyclerAdapter.WorkoutExercisesViewHolder> {
+public class WorkoutExercisePerformanceRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseExercisePerformanceModel, WorkoutExercisePerformanceRecyclerAdapter.WorkoutExercisesViewHolder> {
 
 
     private OnItemClickListener listener;
 
-    public WorkoutExercisePerformanceRecyclerAdapter(@NonNull FirestoreRecyclerOptions<DatabaseWorkoutExerciseModel> options) {
+    public WorkoutExercisePerformanceRecyclerAdapter(@NonNull FirestoreRecyclerOptions<DatabaseExercisePerformanceModel> options) {
         super(options);
     }
 
@@ -33,13 +33,12 @@ public class WorkoutExercisePerformanceRecyclerAdapter extends FirestoreRecycler
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull WorkoutExercisesViewHolder holder, final int position, @NonNull DatabaseWorkoutExerciseModel model) {
+    protected void onBindViewHolder(@NonNull WorkoutExercisesViewHolder holder, final int position, @NonNull DatabaseExercisePerformanceModel model) {
         holder.getExercise_name().setText(model.getExerciseName());
         holder.getDevice_name().setText(model.getDeviceName());
-        // holder.getSet_count().setText(model.get);
-        // holder.getDevice_name().setText(model.getDeviceName());
-        // holder.getDevice_name().setText(model.getDeviceName());
-
+        holder.getSet_count().setText(String.valueOf(model.getSetCount()) + " Sätze");
+        holder.getTotalVolume().setText(String.valueOf(model.getTotalVolume()) + " kg Volumen");
+        holder.getOneRepMax().setText(String.valueOf(model.getOneRepMax()) + " kg ORM");
     }
 
     public void deleteItem(int position) {
@@ -82,7 +81,9 @@ public class WorkoutExercisePerformanceRecyclerAdapter extends FirestoreRecycler
 
             exercise_name = itemView.findViewById(R.id.listItem_workout_exercise_name);
             device_name = itemView.findViewById(R.id.listItem_workout_device_name);
-
+            set_count = itemView.findViewById(R.id.listItem_workout_exercise_setCount);
+            oneRepMax = itemView.findViewById(R.id.listItem_workout_device_oneRepMax);
+            totalVolume = itemView.findViewById(R.id.listItem_workout_device_totalVolume);
             // item click
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,9 +123,7 @@ public class WorkoutExercisePerformanceRecyclerAdapter extends FirestoreRecycler
             return device_name;
         }
 
-        public TextView getSet_count() {
-            return set_count;
-        }
+        public TextView getSet_count() { return set_count; }
 
         public TextView getOneRepMax() {
             return oneRepMax;

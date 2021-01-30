@@ -7,22 +7,34 @@ public class DatabaseExercisePerformanceModel {
 
     private int oneRepMax;
     private String notes;
-    private FieldValue performanceDate;
+    private Timestamp performanceDate;
     private int totalVolume;
     private String workoutId;
     private int setCount;
+    private String exerciseName;
+    private String deviceName;
 
     public DatabaseExercisePerformanceModel() {
         // no argument constructor required for ProGuard (compress and optimize data)
     }
 
-    public DatabaseExercisePerformanceModel(int oneRepMax, String notes, FieldValue performanceDate, int totalVolume, String workoutId, int setCount) {
+    public DatabaseExercisePerformanceModel(
+            int oneRepMax,
+            String notes,
+            Timestamp performanceDate,
+            int totalVolume,
+            String workoutId,
+            int setCount,
+            String exerciseName,
+            String deviceName) {
         this.oneRepMax = oneRepMax;
         this.notes = notes;
         this.performanceDate = performanceDate;
         this.totalVolume = totalVolume;
         this.workoutId = workoutId;
         this.setCount = setCount;
+        this.exerciseName = exerciseName;
+        this.deviceName = deviceName;
     }
 
 
@@ -37,7 +49,7 @@ public class DatabaseExercisePerformanceModel {
         return notes;
     }
 
-    public FieldValue getPerformanceDate() {
+    public Timestamp getPerformanceDate() {
         return performanceDate;
     }
 
@@ -53,8 +65,16 @@ public class DatabaseExercisePerformanceModel {
         return setCount;
     }
 
-    // SETTER
+    public String getExerciseName() {
 
+        return exerciseName;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    // SETTER
 
     public void setOneRepMax(int oneRepMax) {
         this.oneRepMax = oneRepMax;
@@ -64,7 +84,7 @@ public class DatabaseExercisePerformanceModel {
         this.notes = notes;
     }
 
-    public void setPerformanceDate(FieldValue performanceDate) {
+    public void setPerformanceDate(Timestamp performanceDate) {
         this.performanceDate = performanceDate;
     }
 
@@ -79,4 +99,14 @@ public class DatabaseExercisePerformanceModel {
     public void setSetCount(int setCount) {
         this.setCount = setCount;
     }
+
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+
 }

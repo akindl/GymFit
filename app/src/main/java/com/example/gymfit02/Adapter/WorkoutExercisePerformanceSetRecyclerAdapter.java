@@ -35,7 +35,9 @@ public class WorkoutExercisePerformanceSetRecyclerAdapter extends FirestoreRecyc
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ExercisePerformanceSetViewHolder holder, final int position, @NonNull DatabaseExercisePerformanceSetModel model) {
+    protected void onBindViewHolder(@NonNull ExercisePerformanceSetViewHolder holder,
+                                    final int position,
+                                    @NonNull DatabaseExercisePerformanceSetModel model) {
 
         holder.getSetNumber().setText(String.valueOf(model.getSetNumber()));
         holder.getSetReps().setText(String.valueOf(model.getReps()));

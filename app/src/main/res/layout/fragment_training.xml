@@ -14,7 +14,7 @@
         android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/bg_plans"
+            android:id="@+id/bg_workouts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
@@ -34,7 +34,7 @@
             android:textSize="24sp"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            android:text="@string/fragment_training_headline_plans"
+            android:text="@string/fragment_training_headline_workouts"
             app:layout_constraintBottom_toTopOf="@+id/subheadline_plans"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -46,8 +46,8 @@
             android:layout_marginBottom="32dp"
             android:textSize="14sp"
             android:textColor="@color/colorPrimary"
-            android:text="@string/fragment_training_subheadline_plans"
-            app:layout_constraintBottom_toBottomOf="@+id/bg_plans"
+            android:text="@string/fragment_training_subheadline_workouts"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_workouts"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -61,7 +61,7 @@
         android:layout_weight="1">
 
         <ImageView
-            android:id="@+id/bg_exercises"
+            android:id="@+id/bg_plans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -80,7 +80,7 @@
             android:textSize="24sp"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            android:text="@string/fragment_training_headline_exercises"
+            android:text="@string/fragment_training_headline_plans"
             app:layout_constraintBottom_toTopOf="@+id/subheadline_exercises"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -92,7 +92,7 @@
             android:layout_marginBottom="32dp"
             android:textSize="14sp"
             android:textColor="@color/colorPrimary"
-            android:text="@string/fragment_training_subheadline_exercises"
+            android:text="@string/fragment_training_subheadline_plans"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

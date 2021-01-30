@@ -50,10 +50,10 @@
 
 
     <!-- Fragment: Training -->
+    <string name="fragment_training_headline_workouts">Workouts</string>
+    <string name="fragment_training_subheadline_workouts">Wähle die Übungen für ein neues Training aus</string>
     <string name="fragment_training_headline_plans">Trainingspläne</string>
     <string name="fragment_training_subheadline_plans">Erstelle deine eigenen Trainingseinheiten</string>
-    <string name="fragment_training_headline_exercises">Übungen</string>
-    <string name="fragment_training_subheadline_exercises">Wähle die Übungen für dein Training aus</string>
 
 
     <!-- Fragment: CreatePlan -->
@@ -73,6 +73,10 @@
     <string name="fragment_workoutSingleExercisePerformance_repsHint">Wdh.</string>
     <string name="fragment_workoutSingleExercisePerformance_loadHint">Gewicht</string>
     <string name="fragment_workoutSingleExercisePerformance_setNumberHint">Satz</string>
+
+    <!-- Fragment: WorkoutCreation -->
+    <string name="fragment_workoutCreation_button_confirmWorkout">Workout starten</string>
+    <string name="fragment_workoutCreation_workoutName">Name des Workouts</string>
 
 
 </resources>

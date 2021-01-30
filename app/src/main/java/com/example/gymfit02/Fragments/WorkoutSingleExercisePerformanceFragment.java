@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,7 +66,6 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
     // Bundle information
     private String workoutId;
-    private String executionDate;
     private String deviceName;
     private String exerciseName;
     private String notes;
@@ -115,7 +115,6 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null) {
             this.workoutId = bundle.getString("workoutId");
-            this.executionDate = bundle.getString("executionDate");
             this.deviceName = bundle.getString("deviceName");
             this.exerciseName = bundle.getString("exerciseName");
             this.notes = bundle.getString("notes");
@@ -146,6 +145,9 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_workout_single_exercise_performance, container, false);
         // tell host activity that the fragment wants to add some menu options
         setHasOptionsMenu(true);
+        
+        getActivity().setTitle("Übung: " + exerciseName);
+
 
         // Views to show basic information
         // checkExercisePerformanceButton = (Button) rootView.findViewById(R.id.button_workoutExercisePerformance_exercisePerformanceCheck);
@@ -221,14 +223,10 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
                 int load = Integer.parseInt(loadEditText.getText().toString());
                 String rpe = rpeSpinner.getSelectedItem().toString();
 
-
-
-
                 CollectionReference performanceSetsRef = fStore.collection("Users")
                         .document(userId).collection("Exercises")
                         .document(exerciseId).collection("ExercisePerformances")
                         .document(performanceId).collection("PerformanceSets");
-
 
 
                 performanceSetsRef.add(new DatabaseExercisePerformanceSetModel(Integer.valueOf(setNumber), Integer.valueOf(reps),
@@ -266,9 +264,6 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
                 .document(exerciseId).collection("ExercisePerformances")
                 .document(performanceId).collection("PerformanceSets")
                 .orderBy("setNumber", Query.Direction.ASCENDING); // numerical sorted
-
-
-        //.orderBy("exerciseName", Query.Direction.ASCENDING);
 
 
         // RecyclerOptions
@@ -491,52 +486,6 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
         oneRepMax = (double) weight * 36 / (37 - reps);
         return (int) oneRepMax;
     }
-
-
-    /**
-     * Add a new row to the setList.
-     */
-    /*
-    private void setAddExerciseSetRowListener() {
-
-        addSetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final View singleSetView = getLayoutInflater().inflate(R.layout.item_exercise_set_row_single, null,false);
-
-                TextView setNumber = (TextView) singleSetView.findViewById(R.id.textView_workoutExercisePerformance_setNumber);
-                EditText reps = (EditText) singleSetView.findViewById(R.id.editText_workoutExercisePerformance_reps);
-                EditText load = (EditText) singleSetView.findViewById(R.id.editText_workoutExercisePerformance_load);
-                Spinner rpe = (Spinner) singleSetView.findViewById(R.id.spinner_workoutExercisePerformance_rpe);
-                ImageView remove = (ImageView) singleSetView.findViewById(R.id.imageView_workoutExercisePerformance_remove);
-
-                ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, rpeSpinnerList);
-                rpe.setAdapter(arrayAdapter);
-
-                layoutList.addView(singleSetView);
-
-                remove.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        setRemoveExerciseSetRow(singleSetView);
-                    }
-                });
-            }
-        });
-
-    }
-    */
-
-
-    /**
-     * Remove a single row of the setList
-     */
-    /*
-    private void setRemoveExerciseSetRow(View view) {
-        layoutList.removeView(view);
-    }
-    */
 
 }
 

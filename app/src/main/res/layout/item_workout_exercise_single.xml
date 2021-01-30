@@ -8,41 +8,19 @@
     android:paddingTop="4dp"
     android:paddingBottom="20dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/workoutExerciseImage"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher"
-            tools:src="@tools:sample/avatars" />
-
-    </androidx.cardview.widget.CardView>
-
 
     <TextView
         android:id="@+id/listItem_workout_exercise_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
         android:text="TextView"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -63,15 +41,15 @@
         android:id="@+id/listItem_workout_exercise_setCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_baseline_library_check_sets"
+        android:drawablePadding="3dp"
         android:text="TextView"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="14sp"
-        android:drawableLeft="@drawable/ic_baseline_library_check_sets"
-        android:drawablePadding="2dp"
-        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listItem_workout_exercise_name" />
 
     <TextView
@@ -100,7 +78,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="14sp"
         android:drawableLeft="@drawable/ic_baseline_total_volume"
-        android:drawablePadding="2dp"
+        android:drawablePadding="3dp"
         app:layout_constraintStart_toEndOf="@+id/listItem_workout_device_oneRepMax"
         app:layout_constraintTop_toBottomOf="@+id/listItem_workout_device_name" />
 

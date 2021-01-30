@@ -67,6 +67,8 @@ public class PlansOverviewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_plans_overview, container, false);
 
+        getActivity().setTitle("Deine Trainingspläne");
+
         setupRecyclerView(rootView);
 
         createPlanButton = (Button) rootView.findViewById(R.id.createPlanButton);

@@ -1,42 +1,63 @@
 package com.example.gymfit02.Adapter;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gymfit02.Models.DatabaseWorkoutModel;
+import com.example.gymfit02.Models.DatabaseExerciseModel;
+import com.example.gymfit02.Models.DatabaseExercisePerformanceModel;
 import com.example.gymfit02.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 
-public class WorkoutRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseWorkoutModel, WorkoutRecyclerAdapter.WorkoutViewHolder> {
+
+public class WorkoutCreationRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseExerciseModel, WorkoutCreationRecyclerAdapter.ViewHolder> {
 
 
     private OnItemClickListener listener;
 
-    public WorkoutRecyclerAdapter(@NonNull FirestoreRecyclerOptions<DatabaseWorkoutModel> options) {
+
+    public WorkoutCreationRecyclerAdapter(@NonNull FirestoreRecyclerOptions<DatabaseExerciseModel> options) {
         super(options);
     }
 
     @NonNull
     @Override
-    public WorkoutViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_workout_single, parent, false);
-        return new WorkoutViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_workout_creation_exercise_single, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull WorkoutViewHolder holder, final int position, @NonNull DatabaseWorkoutModel model) {
-        holder.getWorkout_name().setText(model.getName());
-        holder.getWorkout_executionDate().setText(model.getExecutionDate().toDate().toString());
+    protected void onBindViewHolder(@NonNull final ViewHolder holder, final int position, @NonNull DatabaseExerciseModel model) {
+        holder.getExercise_name().setText(model.getExerciseName());
+        holder.getDevice_name().setText(model.getDeviceName());
+        holder.getIcon_check().setVisibility(View.GONE);
+        // clicked.set(position, holder.getIcon_check().getVisibility());
+        // VISIBLE == 0
+        // GONE == 8
+        holder.getIcon_check().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int visibility = holder.getIcon_check().getVisibility();
+
+                if(visibility == View.VISIBLE) {
+                    holder.getIcon_check().setVisibility(View.GONE);
+                } else {
+                    holder.getIcon_check().setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
     }
 
     public void deleteItem(int position) {
@@ -64,22 +85,25 @@ public class WorkoutRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseWor
     /**
      * ViewHolder Class
      */
-    class WorkoutViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView workout_name;
-        private TextView workout_executionDate;
+        private TextView exercise_name;
+        private TextView device_name;
+        private ImageView icon_check;
 
 
-        public WorkoutViewHolder(@NonNull final View itemView) {
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            workout_name = itemView.findViewById(R.id.listItem_workout_name);
-            workout_executionDate = itemView.findViewById(R.id.listItem_workout_executionDate);
+            exercise_name = itemView.findViewById(R.id.listItem_workout_creation_exercise_name);
+            device_name = itemView.findViewById(R.id.listItem_workout_creation_device_name);
+            icon_check = itemView.findViewById(R.id.imageView_workout_creation_check);
 
             // item click
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     int adapterPosition = getAdapterPosition();
                     // send Click from the Adapter to the activity/ fragment
                     // NO_POSITION is constant = -1
@@ -107,28 +131,34 @@ public class WorkoutRecyclerAdapter extends FirestoreRecyclerAdapter<DatabaseWor
 
         // GETTER
 
-        public TextView getWorkout_name() {
-            return workout_name;
+        public TextView getExercise_name() {
+            return exercise_name;
         }
 
-        public TextView getWorkout_executionDate() {
-            return workout_executionDate;
+        public TextView getDevice_name() {
+            return device_name;
         }
 
-
+        public ImageView getIcon_check() {
+            return icon_check;
+        }
 
         // SETTER
 
-        public void setWorkout_name(TextView workout_name) {
-            this.workout_name = workout_name;
+
+        public void setExercise_name(TextView exercise_name) {
+            this.exercise_name = exercise_name;
         }
 
-        public void setWorkout_executionDate(TextView workout_executionDate) {
-            this.workout_executionDate = workout_executionDate;
+        public void setDevice_name(TextView device_name) {
+            this.device_name = device_name;
         }
 
-
+        public void setIcon_check(ImageView icon_check) {
+            this.icon_check = icon_check;
+        }
     }
 
 }
+
 
