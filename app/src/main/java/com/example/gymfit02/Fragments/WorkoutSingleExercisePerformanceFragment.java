@@ -27,6 +27,7 @@ import com.example.gymfit02.Adapter.WorkoutExercisePerformanceSetRecyclerAdapter
 import com.example.gymfit02.Models.DatabaseExercisePerformanceModel;
 import com.example.gymfit02.Models.DatabaseExercisePerformanceSetModel;
 import com.example.gymfit02.R;
+import com.example.gymfit02.Util.Container;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -112,7 +113,7 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
         // Get the workoutId from the selected Workout
         Bundle bundle = this.getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             this.workoutId = bundle.getString("workoutId");
             this.deviceName = bundle.getString("deviceName");
             this.exerciseName = bundle.getString("exerciseName");
@@ -122,10 +123,22 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
         }
 
-        rpeSpinnerList.add("Einfach");
-        rpeSpinnerList.add("Mittel");
-        rpeSpinnerList.add("Schwer");
-        rpeSpinnerList.add("Muskelversagen");
+        /*
+        rpeSpinnerList.add("1 = Sehr einfach");
+        rpeSpinnerList.add("3 = Einfach");
+        rpeSpinnerList.add("5 = Mittel");
+        rpeSpinnerList.add("7 = Etwas Schwer");
+        rpeSpinnerList.add("8 = Schwer");
+        rpeSpinnerList.add("9 = Sehr schwer");
+        rpeSpinnerList.add("10 = Muskelversagen");
+
+         */
+
+        rpeSpinnerList.add("T3+ = Einfach");
+        rpeSpinnerList.add("T3 = Mittel");
+        rpeSpinnerList.add("T2 = Schwer");
+        rpeSpinnerList.add("T1 = Sehr Schwer");
+        rpeSpinnerList.add("T0 = Muskelversagen");
 
         setupFirestoreConnection();
 
@@ -209,7 +222,6 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
     }
 
 
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.new_exercise_performance_menu, menu);
@@ -230,82 +242,53 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
     private void saveExercisePerformance() {
 
-        fStore.collection("Users")
-            .document(userId).collection("Exercises")
-            .document(exerciseId).collection("ExercisePerformances")
-            .document(performanceId).collection("PerformanceSets")
-            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        exercisePerformanceReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    for(QueryDocumentSnapshot document : task.getResult()) {
-                        checkExerciseSetToTrue(document);
-                    }
+            public void onSuccess(final DocumentSnapshot exercisePerformanceSnapshot) {
 
-                }
-            }
-        });
+                totalVolume = (Long) exercisePerformanceSnapshot.get("totalVolume");
+                setCount = (Long) exercisePerformanceSnapshot.get("setCount");
+                final Container<Long> maxOneRepMax = new Container<>((long) exercisePerformanceSnapshot.get("oneRepMax"));
 
-    }
-
-    /**
-     * Iterate through the list and update all "check" entrys to true
-     */
-    private void checkExerciseSetToTrue(DocumentSnapshot documentSnapshot) {
-
-        final DatabaseExercisePerformanceSetModel singleSet = documentSnapshot.toObject(DatabaseExercisePerformanceSetModel.class);
-        final DocumentReference singleSetReference = documentSnapshot.getReference();
-        boolean check = singleSet.getCheck();
-
-        if(check == false) {
-            documentSnapshot.getReference().update("check", true);
-
-                exercisePerformanceReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                fStore.collection("Users")
+                        .document(userId).collection("Exercises")
+                        .document(exerciseId).collection("ExercisePerformances")
+                        .document(performanceId).collection("PerformanceSets")
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot performanceSetSnapshot : task.getResult()) {
 
-                        // update totalVolume in exercisePerformance document
-                        totalVolume = (Long) documentSnapshot.get("totalVolume");
-                        int weight = singleSet.getLoad();
-                        int reps = singleSet.getReps();
-                        totalVolume += weight * reps;
-                        exercisePerformanceReference.update("totalVolume", totalVolume);
+                                final DatabaseExercisePerformanceSetModel singleSet = performanceSetSnapshot.toObject(DatabaseExercisePerformanceSetModel.class);
+                                final DocumentReference singleSetReference = performanceSetSnapshot.getReference();
+                                boolean check = singleSet.getCheck();
 
-                        // TODO setCount wird im exercisePerformance document nicht erhöht??
-                        //  die richtige Zahl wird geladen, dann aber mit der ersten überschrieben...
-                        // update setNumber in exercisePerformance document
-                        setCount = (Long) documentSnapshot.get("setCount");
-                        setCount += 1;
-                        exercisePerformanceReference.update("setCount", setCount);
+                                if (!check) {
+                                    performanceSetSnapshot.getReference().update("check", true);
 
-                        // update oneRepMax in performanceSet document
-                        int oneRepMax = calcOneRepMax(weight, reps);
-                        singleSetReference.update("oneRepMax", oneRepMax);
+                                    // update totalVolume in exercisePerformance document
+                                    int weight = singleSet.getLoad();
+                                    int reps = singleSet.getReps();
+                                    totalVolume += weight * reps;
 
-                        // update oneRepMax in exercisePerformance document
-                        fStore.collection("Users")
-                                .document(userId).collection("Exercises")
-                                .document(exerciseId).collection("ExercisePerformances")
-                                .document(performanceId).collection("PerformanceSets")
-                                .orderBy("oneRepMax", Query.Direction.DESCENDING).limit(1)
-                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
-                                DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
-                                exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
+                                    setCount += 1;
+
+                                    // update oneRepMax in performanceSet document
+                                    long oneRepMax = calcOneRepMax(weight, reps);
+                                    singleSetReference.update("oneRepMax", oneRepMax);
+                                    maxOneRepMax.item = Math.max(maxOneRepMax.item, oneRepMax);
+                                }
                             }
-                        });
+                        }
+                        exercisePerformanceReference.update("totalVolume", totalVolume);
+                        exercisePerformanceReference.update("setCount", setCount);
+                        exercisePerformanceReference.update("oneRepMax", maxOneRepMax.item);
                     }
                 });
-
-                Log.d(TAG, "DocumentSnapshot successfully updated!");
-
-
-        }
-
+            }
+        });
     }
-
 
     private void setNewSetPerformanceListener() {
         addSetButton.setOnClickListener(new View.OnClickListener() {
@@ -313,7 +296,7 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(repsEditText.getText().toString().isEmpty() || loadEditText.getText().toString().isEmpty()) {
+                if (repsEditText.getText().toString().isEmpty() || loadEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), "Bitte Werte eintragen.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -352,6 +335,7 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
 
     /**
      * Help-method to setup the RecyclerView
+     *
      * @param view
      */
     private void setupRecyclerView(View view) {
@@ -386,112 +370,112 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
                 final DatabaseExercisePerformanceSetModel singleSet = documentSnapshot.toObject(DatabaseExercisePerformanceSetModel.class);
                 final DocumentReference singleSetReference = documentSnapshot.getReference();
                 boolean check = singleSet.getCheck();
-                if(check) {
+                if (check) {
                     documentSnapshot.getReference().update("check", false)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
 
-                                exercisePerformanceReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    exercisePerformanceReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                        // update totalVolume in exercisePerformance document
-                                        totalVolume = (Long) documentSnapshot.get("totalVolume");
-                                        int weight = singleSet.getLoad();
-                                        int reps = singleSet.getReps();
-                                        totalVolume -= weight * reps;
-                                        exercisePerformanceReference.update("totalVolume", totalVolume);
+                                            // update totalVolume in exercisePerformance document
+                                            totalVolume = (Long) documentSnapshot.get("totalVolume");
+                                            int weight = singleSet.getLoad();
+                                            int reps = singleSet.getReps();
+                                            totalVolume -= weight * reps;
+                                            exercisePerformanceReference.update("totalVolume", totalVolume);
 
-                                        // update setCount in exercisePerformance document
-                                        setCount = (Long) documentSnapshot.get("setCount");
-                                        setCount -= 1;
-                                        exercisePerformanceReference.update("setCount", setCount);
+                                            // update setCount in exercisePerformance document
+                                            setCount = (Long) documentSnapshot.get("setCount");
+                                            setCount -= 1;
+                                            exercisePerformanceReference.update("setCount", setCount);
 
-                                        // update oneRepMax in performanceSet document
-                                        singleSetReference.update("oneRepMax", 0);
+                                            // update oneRepMax in performanceSet document
+                                            singleSetReference.update("oneRepMax", 0);
 
-                                        // update oneRepMax in exercisePerformance document
-                                        fStore.collection("Users")
-                                                .document(userId).collection("Exercises")
-                                                .document(exerciseId).collection("ExercisePerformances")
-                                                .document(performanceId).collection("PerformanceSets")
-                                                .orderBy("oneRepMax", Query.Direction.DESCENDING).limit(1)
-                                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
-                                                DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
-                                                exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
-                                            }
-                                        });
-                                    }
-                                });
-                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                            // update oneRepMax in exercisePerformance document
+                                            fStore.collection("Users")
+                                                    .document(userId).collection("Exercises")
+                                                    .document(exerciseId).collection("ExercisePerformances")
+                                                    .document(performanceId).collection("PerformanceSets")
+                                                    .orderBy("oneRepMax", Query.Direction.DESCENDING).limit(1)
+                                                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
+                                                    DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
+                                                    exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
+                                                }
+                                            });
+                                        }
+                                    });
+                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
 
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error updating document", e);
-                                Log.d(TAG, documentSnapshot.getReference().getParent().getParent().getId());
-                            }
-                        });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                    Log.d(TAG, documentSnapshot.getReference().getParent().getParent().getId());
+                                }
+                            });
                 } else {
                     documentSnapshot.getReference().update("check", true)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
 
-                                exercisePerformanceReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    exercisePerformanceReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                        // update totalVolume in exercisePerformance document
-                                        totalVolume = (Long) documentSnapshot.get("totalVolume");
-                                        int weight = singleSet.getLoad();
-                                        int reps = singleSet.getReps();
-                                        totalVolume += weight * reps;
-                                        exercisePerformanceReference.update("totalVolume", totalVolume);
+                                            // update totalVolume in exercisePerformance document
+                                            totalVolume = (Long) documentSnapshot.get("totalVolume");
+                                            int weight = singleSet.getLoad();
+                                            int reps = singleSet.getReps();
+                                            totalVolume += weight * reps;
+                                            exercisePerformanceReference.update("totalVolume", totalVolume);
 
-                                        // update setNumber in exercisePerformance document
-                                        setCount = (Long) documentSnapshot.get("setCount");
-                                        setCount += 1;
-                                        exercisePerformanceReference.update("setCount", setCount);
+                                            // update setNumber in exercisePerformance document
+                                            setCount = (Long) documentSnapshot.get("setCount");
+                                            setCount += 1;
+                                            exercisePerformanceReference.update("setCount", setCount);
 
-                                        // update oneRepMax in performanceSet document
-                                        int oneRepMax = calcOneRepMax(weight, reps);
-                                        singleSetReference.update("oneRepMax", oneRepMax);
+                                            // update oneRepMax in performanceSet document
+                                            int oneRepMax = calcOneRepMax(weight, reps);
+                                            singleSetReference.update("oneRepMax", oneRepMax);
 
-                                        // update oneRepMax in exercisePerformance document
-                                        fStore.collection("Users")
-                                                .document(userId).collection("Exercises")
-                                                .document(exerciseId).collection("ExercisePerformances")
-                                                .document(performanceId).collection("PerformanceSets")
-                                                .orderBy("oneRepMax", Query.Direction.DESCENDING).limit(1)
-                                                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
-                                                DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
-                                                exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
-                                            }
-                                        });
-                                    }
-                                });
+                                            // update oneRepMax in exercisePerformance document
+                                            fStore.collection("Users")
+                                                    .document(userId).collection("Exercises")
+                                                    .document(exerciseId).collection("ExercisePerformances")
+                                                    .document(performanceId).collection("PerformanceSets")
+                                                    .orderBy("oneRepMax", Query.Direction.DESCENDING).limit(1)
+                                                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    // Log.d(TAG, queryDocumentSnapshots.getDocuments().get(0).getReference().toString());
+                                                    DatabaseExercisePerformanceSetModel singleSetWithOneRepMax = queryDocumentSnapshots.toObjects(DatabaseExercisePerformanceSetModel.class).get(0);
+                                                    exercisePerformanceReference.update("oneRepMax", singleSetWithOneRepMax.getOneRepMax());
+                                                }
+                                            });
+                                        }
+                                    });
 
-                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
 
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error updating document", e);
-                                Log.d(TAG, documentSnapshot.getReference().getParent().getParent().getId());
-                            }
-                        });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                    Log.d(TAG, documentSnapshot.getReference().getParent().getParent().getId());
+                                }
+                            });
                 }
 
 
@@ -513,11 +497,11 @@ public class WorkoutSingleExercisePerformanceFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
 
-                final DocumentSnapshot snapshot =  adapter.getSnapshots().getSnapshot(viewHolder.getAdapterPosition());
+                final DocumentSnapshot snapshot = adapter.getSnapshots().getSnapshot(viewHolder.getAdapterPosition());
                 final DatabaseExercisePerformanceSetModel singleSet = snapshot.toObject(DatabaseExercisePerformanceSetModel.class);
                 final DocumentReference singleSetReference = snapshot.getReference();
                 boolean check = singleSet.getCheck();
-                if(check) {
+                if (check) {
                     snapshot.getReference().update("check", false)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

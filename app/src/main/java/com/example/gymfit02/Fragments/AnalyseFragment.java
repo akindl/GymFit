@@ -87,23 +87,22 @@ public class AnalyseFragment extends Fragment {
 
     private void setupRecyclerView(View view) {
 
-//        query = fStore.collection("Users")
-//                .document(userId).collection("Exercises");
-//        //.whereArrayContains("workouts", workoutId);
-//        //.orderBy("exerciseName", Query.Direction.ASCENDING); //alphabetisch sortiert
-//
-//
-//        // TODO .groupCollection("ExercisePerformances").equalTo("workoutId", workoutId);
-//
-//
-//        // RecyclerOptions
-//        options = new FirestoreRecyclerOptions.Builder<DatabaseWorkoutExerciseModel>()
-//                .setLifecycleOwner(this) // this start and stop the adapter automatically
-//                .setQuery(query, DatabaseWorkoutExerciseModel.class)
-//                .build();
-//
-//        adapter = new WorkoutExercisePerformanceRecyclerAdapter(options);
-//
+        query = fStore.collection("Users")
+                .document(userId).collection("Exercises");
+        //.orderBy("exerciseName", Query.Direction.ASCENDING); //alphabetisch sortiert
+
+
+        // TODO .groupCollection("ExercisePerformances").equalTo("workoutId", workoutId);
+
+
+        // RecyclerOptions
+        options = new FirestoreRecyclerOptions.Builder<DatabaseWorkoutExerciseModel>()
+                .setLifecycleOwner(this) // this start and stop the adapter automatically
+                .setQuery(query, DatabaseWorkoutExerciseModel.class)
+                .build();
+
+        // adapter = new WorkoutExercisePerformanceRecyclerAdapter(options);
+
 //        workoutExercisesRecyclerView = (RecyclerView) view.findViewById(R.id.workoutExercisesRecyclerView);
 //        workoutExercisesRecyclerView.setHasFixedSize(true);
 //        workoutExercisesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

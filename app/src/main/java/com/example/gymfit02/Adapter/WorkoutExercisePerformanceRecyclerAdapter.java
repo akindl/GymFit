@@ -38,7 +38,7 @@ public class WorkoutExercisePerformanceRecyclerAdapter extends FirestoreRecycler
         holder.getDevice_name().setText(model.getDeviceName());
         holder.getSet_count().setText(String.valueOf(model.getSetCount()) + " Sätze");
         holder.getTotalVolume().setText(String.valueOf(model.getTotalVolume()) + " kg Volumen");
-        holder.getOneRepMax().setText(String.valueOf(model.getOneRepMax()) + " kg ORM");
+        holder.getOneRepMax().setText(String.valueOf(model.getOneRepMax()) + " kg 1RM");
     }
 
     public void deleteItem(int position) {

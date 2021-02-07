@@ -34,7 +34,7 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/my_button_primary"
-        android:text="@string/fragment_workoutsExercises_button_addExercise"
+        android:text="@string/fragment_workoutsExercises_button_editWorkout"
         android:textColor="@color/colorPrimaryWhite"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

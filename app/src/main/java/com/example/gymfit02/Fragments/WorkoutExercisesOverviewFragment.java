@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -157,6 +159,26 @@ public class WorkoutExercisesOverviewFragment extends Fragment {
             public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
             }
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+
+                // TODO Delete function
+                //  Before deleting element, the workoutId has to be removed in Array from the
+                //  parent document in collection "Exercises"
+
+                // delete item from firestore
+                adapter.deleteItem(viewHolder.getAdapterPosition());
+
+            }
+        }).attachToRecyclerView(workoutExercisesRecyclerView);
     }
 
 

@@ -169,7 +169,9 @@ public class WorkoutCreationFragment extends Fragment {
                     query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            queryDocumentSnapshots.getDocuments().get(0).getReference().delete();
+
+                            if(!queryDocumentSnapshots.isEmpty())
+                                queryDocumentSnapshots.getDocuments().get(0).getReference().delete();
                         }
                     });
 

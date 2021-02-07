@@ -64,7 +64,7 @@
     <string name="fragment_workoutsOverview_button_createWorkout">Workout erstellen</string>
 
     <!-- Fragment: WorkoutExercises -->
-    <string name="fragment_workoutsExercises_button_addExercise">Übung hinzufügen</string>
+    <string name="fragment_workoutsExercises_button_editWorkout">Workout bearbeiten</string>
 
     <!-- Fragment: WorkoutExercisesSinglePerformance -->
     <string name="fragment_workoutSingleExercisePerformance_addSet">Satz hinzufügen</string>
