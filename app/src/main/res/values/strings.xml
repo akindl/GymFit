@@ -78,6 +78,10 @@
     <string name="fragment_workoutCreation_button_confirmWorkout">Workout starten</string>
     <string name="fragment_workoutCreation_workoutName">Name des Workouts</string>
 
+    <!-- Fragment: AnalyseExercise -->
+    <string name="fragment_analyseExercise_oneRepMaxHeadline">Chart: Berechnetes 1 RM (kg)</string>
+    <string name="fragment_analyseExercise_totalVolumeHeadline">Chart: Gesamtes Volumen (kg)</string>
+
 
 </resources>
 

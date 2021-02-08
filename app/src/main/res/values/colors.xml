@@ -11,5 +11,6 @@
     <color name ="colorBackgroundDark">#01223E</color>
     <color name ="colorBackgroundLight">#163148</color>
     <color name ="colorIconBlue">#4E6578</color>
+    <color name ="highlightChartRed">#F47575</color>
 
 </resources>
