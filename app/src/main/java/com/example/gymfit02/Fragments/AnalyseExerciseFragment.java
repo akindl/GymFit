@@ -87,21 +87,30 @@ public class AnalyseExerciseFragment extends Fragment {
 
         final LineChart oneRepMaxLineChart = rootView.findViewById(R.id.lineChart_analyseExercise_oneRepMax);
         final LineChart totalVolumeLineChart = rootView.findViewById(R.id.lineChart_analyseExercise_totalVolume);
+        final LineChart totalSetsLineChart = rootView.findViewById(R.id.fragment_analyseExercise_totalSets);
 
         OnSuccessListener<ArrayList<Entry>> oneRepMaxDataListener = new OnSuccessListener<ArrayList<Entry>>() {
             @Override
             public void onSuccess(ArrayList<Entry> entries) {
-                setupChart(oneRepMaxLineChart, entries, "One Rep Max", "kg");
+                setupChart(oneRepMaxLineChart, entries, "One Rep Max", "kg", true);
             }
         };
 
         OnSuccessListener<ArrayList<Entry>> totalVolumeDataListener = new OnSuccessListener<ArrayList<Entry>>() {
             @Override
             public void onSuccess(ArrayList<Entry> entries) {
-                setupChart(totalVolumeLineChart, entries, "Total Volume", "kg");
+                setupChart(totalVolumeLineChart, entries, "Total Volume", "kg", true);
             }
         };
-        this.loadChartDataFromFirebase(oneRepMaxDataListener, totalVolumeDataListener);
+
+        OnSuccessListener<ArrayList<Entry>> totalSetsLineChartListener = new OnSuccessListener<ArrayList<Entry>>() {
+            @Override
+            public void onSuccess(ArrayList<Entry> entries) {
+                setupChart(totalSetsLineChart, entries, "Total Sets", "", false);
+            }
+        };
+
+        this.loadChartDataFromFirebase(oneRepMaxDataListener, totalVolumeDataListener, totalSetsLineChartListener);
         return rootView;
     }
 
@@ -116,7 +125,7 @@ public class AnalyseExerciseFragment extends Fragment {
         fStore = FirebaseFirestore.getInstance();
     }
 
-    private void setupChart(final LineChart chart, ArrayList<Entry> values, String name, final String yAxisUnit) {
+    private void setupChart(final LineChart chart, ArrayList<Entry> values, String name, final String yAxisUnit, boolean setCubicMode) {
         // no description text
         chart.getDescription().setEnabled(false);
 
@@ -175,8 +184,10 @@ public class AnalyseExerciseFragment extends Fragment {
 
         // Data
         LineDataSet set1 = new LineDataSet(values, name);
-        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        set1.enableDashedLine(10f,10f, 10f);
+        if(setCubicMode) {
+            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            set1.enableDashedLine(10f, 10f, 10f);
+        }
         set1.setCubicIntensity(0.2f);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
         set1.setColor(Color.rgb(113,152,47)); // NEW ColorTemplate.getHoloBlue()
@@ -204,7 +215,8 @@ public class AnalyseExerciseFragment extends Fragment {
 
     private void loadChartDataFromFirebase(
             final OnSuccessListener<ArrayList<Entry>> oneRepMaxDataListener,
-            final OnSuccessListener<ArrayList<Entry>> totalVolumeDataListener) {
+            final OnSuccessListener<ArrayList<Entry>> totalVolumeDataListener,
+            final OnSuccessListener<ArrayList<Entry>> totalSetsDataListener) {
 
         fStore.collection("Users").document(userId)
                 .collection("Exercises").document(exerciseId)
@@ -216,14 +228,17 @@ public class AnalyseExerciseFragment extends Fragment {
                     public void onSuccess(QuerySnapshot data) {
                         ArrayList<Entry> maxOneRepData = new ArrayList<>();
                         ArrayList<Entry> totalVolumeData = new ArrayList<>();
+                        ArrayList<Entry> totalSetsData = new ArrayList<>();
 
                         for (DocumentSnapshot performanceSetSnapshot : data) {
                             DatabaseExercisePerformanceModel performanceSetModel = performanceSetSnapshot.toObject(DatabaseExercisePerformanceModel.class);
                             maxOneRepData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getOneRepMax()));
                             totalVolumeData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getTotalVolume()));
+                            totalSetsData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getSetCount()));
                         }
                         oneRepMaxDataListener.onSuccess(maxOneRepData);
                         totalVolumeDataListener.onSuccess(totalVolumeData);
+                        totalSetsDataListener.onSuccess(totalSetsData);
                     }
                 });
     }

@@ -81,6 +81,7 @@
     <!-- Fragment: AnalyseExercise -->
     <string name="fragment_analyseExercise_oneRepMaxHeadline">Chart: Berechnetes 1 RM (kg)</string>
     <string name="fragment_analyseExercise_totalVolumeHeadline">Chart: Gesamtes Volumen (kg)</string>
+    <string name="fragment_analyseExercise_totalSets">Chart: Anzahl Sätze</string>
 
 
 </resources>

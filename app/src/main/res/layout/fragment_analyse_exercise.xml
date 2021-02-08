@@ -64,6 +64,25 @@
                 android:layout_weight="1"
                 android:layout_margin="10dp" />
 
+            <TextView
+                android:id="@+id/textView_analyseExercise_totalSetsHeadline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/fragment_analyseExercise_totalSets" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/fragment_analyseExercise_totalSets"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp" />
+
         </LinearLayout>
 
 
