@@ -60,7 +60,10 @@ public class AnalyseExerciseFragment extends Fragment {
     private FirebaseUser user;
 
     // Bundle
-    String exerciseId = "TbqQ25iccZgpm7AAnUa0";
+    // String exerciseId = "9bzWQkmZAzJfGdW4QV4s"; // 9bzWQkmZAzJfGdW4QV4s  TbqQ25iccZgpm7AAnUa0  zEGUVEkHLNCGqui5iN8e
+    String exerciseId;
+    String exerciseName;
+    String deviceName;
 
     public AnalyseExerciseFragment() {
         // Required empty public constructor
@@ -74,6 +77,8 @@ public class AnalyseExerciseFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null) {
             this.exerciseId = bundle.getString("exerciseId");
+            this.exerciseName = bundle.getString("exerciseName");
+            this.deviceName = bundle.getString("deviceName");
         }
 
         setupFirestoreConnection();
@@ -83,7 +88,7 @@ public class AnalyseExerciseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analyse_exercise, container, false);
-        getActivity().setTitle("Analyse von: ");
+        getActivity().setTitle("Analyse: " + exerciseName + " " + deviceName);
 
         final LineChart oneRepMaxLineChart = rootView.findViewById(R.id.lineChart_analyseExercise_oneRepMax);
         final LineChart totalVolumeLineChart = rootView.findViewById(R.id.lineChart_analyseExercise_totalVolume);
@@ -152,7 +157,7 @@ public class AnalyseExerciseFragment extends Fragment {
         // xAxis.setTypeface(tfLight);
         xAxis.setTextSize(10f);
         xAxis.setTextColor(Color.WHITE);
-        xAxis.setDrawAxisLine(true); // NEW from false
+        xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
         xAxis.setCenterAxisLabels(false);
         xAxis.setValueFormatter(new ValueFormatter() {
@@ -193,7 +198,7 @@ public class AnalyseExerciseFragment extends Fragment {
         set1.setColor(Color.rgb(113,152,47)); // NEW ColorTemplate.getHoloBlue()
         // set1.setValueTextColor(ColorTemplate.getHoloBlue());
         set1.setLineWidth(3f);
-        set1.setDrawValues(true); // NEW
+        set1.setDrawValues(true);
         // set1.setFillAlpha(100);
         set1.setFillColor(Color.rgb(113,152,47)); // NEW ColorTemplate.getHoloBlue()
         set1.setHighLightColor(Color.rgb(244,117,117));

@@ -10,22 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gymfit02.Adapter.AnalyseExerciseRecyclerAdapter;
+import com.example.gymfit02.Adapter.WorkoutCreationRecyclerAdapter;
 import com.example.gymfit02.Adapter.WorkoutExercisePerformanceRecyclerAdapter;
+import com.example.gymfit02.Models.DatabaseExerciseModel;
 import com.example.gymfit02.Models.DatabaseWorkoutExerciseModel;
 import com.example.gymfit02.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.StorageReference;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AnalyseFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
+
 public class AnalyseFragment extends Fragment {
 
     private static final String TAG = "analyseFragment";
@@ -68,31 +71,58 @@ public class AnalyseFragment extends Fragment {
 
         getActivity().setTitle("Deine Analysen");
 
+        setupRecyclerView(rootView);
+
         return rootView;
     }
 
     private void setupRecyclerView(View view) {
 
         query = fStore.collection("Users")
-                .document(userId).collection("Exercises");
-        //.orderBy("exerciseName", Query.Direction.ASCENDING); //alphabetisch sortiert
-
-
-        // TODO .groupCollection("ExercisePerformances").equalTo("workoutId", workoutId);
+                .document(userId).collection("Exercises")
+                .orderBy("exerciseName", Query.Direction.ASCENDING); //alphabetisch sortiert
 
 
         // RecyclerOptions
-        options = new FirestoreRecyclerOptions.Builder<DatabaseWorkoutExerciseModel>()
+        FirestoreRecyclerOptions<DatabaseExerciseModel> options = new FirestoreRecyclerOptions.Builder<DatabaseExerciseModel>()
                 .setLifecycleOwner(this) // this start and stop the adapter automatically
-                .setQuery(query, DatabaseWorkoutExerciseModel.class)
+                .setQuery(query, DatabaseExerciseModel.class)
                 .build();
 
-        // adapter = new WorkoutExercisePerformanceRecyclerAdapter(options);
+        AnalyseExerciseRecyclerAdapter adapter = new AnalyseExerciseRecyclerAdapter(options);
 
-//        workoutExercisesRecyclerView = (RecyclerView) view.findViewById(R.id.workoutExercisesRecyclerView);
-//        workoutExercisesRecyclerView.setHasFixedSize(true);
-//        workoutExercisesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        workoutExercisesRecyclerView.setAdapter(adapter);
+        RecyclerView analyseExerciseRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_analyse_allExercisesList);
+        analyseExerciseRecyclerView.setHasFixedSize(true);
+        analyseExerciseRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        analyseExerciseRecyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new AnalyseExerciseRecyclerAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+
+                String exerciseId = documentSnapshot.getId();
+                String exerciseName = (String) documentSnapshot.get("exerciseName");
+                String deviceName = (String) documentSnapshot.get("deviceName");
+                Bundle bundle = new Bundle();
+                bundle.putString("exerciseId", exerciseId);
+                bundle.putString("exerciseName", exerciseName);
+                bundle.putString("deviceName", deviceName);
+
+                AnalyseExerciseFragment workoutExercisesOverviewFragment = new AnalyseExerciseFragment();
+                workoutExercisesOverviewFragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        // fragment_container_view is the FragmentContainer of all fragments in MainActivity
+                        .replace(R.id.fragment_container_view, workoutExercisesOverviewFragment, "openAnalyseExerciseFragment")
+                        .addToBackStack(null)
+                        .commit();
+            }
+
+            @Override
+            public void onItemLongClick(DocumentSnapshot documentSnapshot, int position) {
+
+            }
+        });
     }
 
 

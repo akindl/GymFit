@@ -33,21 +33,14 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView btm_nav_view;
-    private Button mLogoutBtn;
     private FirebaseAuth fAuth;
     private FirebaseFirestore db;
-    private String userID;
-    private Button resendVerificationCode;
-    private TextView mVerifyMsg;
+
     private Fragment trainingFragment;
     private Fragment analyseFragment;
     private Fragment friendsFragment;
     private Fragment profilFragment;
 
-    private Fragment exercisesOverviewFragment;
-    private Fragment workoutsOverviewFragment;
-    private Fragment workoutCreationFragment;
-    private Fragment analyseExerciseFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +51,6 @@ public class MainActivity extends AppCompatActivity {
         analyseFragment = new AnalyseFragment();
         friendsFragment = new FriendsFragment();
         profilFragment = new ProfilFragment();
-
-        //TODO delete this fragments
-        exercisesOverviewFragment = new ExercisesOverviewFragment();
-        workoutsOverviewFragment = new WorkoutsOverviewFragment();
-        workoutCreationFragment = new WorkoutCreationFragment();
-        analyseExerciseFragment = new AnalyseExerciseFragment();
 
 
         fAuth = FirebaseAuth.getInstance();
@@ -108,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         // Toast.makeText(MainActivity.this, "Training", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.analyse:
-                        setFragment(analyseExerciseFragment); // analyseFragment
+                        setFragment(analyseFragment); // analyseFragment analyseExerciseFragment
                         // Toast.makeText(MainActivity.this, "Analyse", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.friends:
