@@ -51,45 +51,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/textView_settingTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/fragment_createExercise_settingTitle"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView_createExercise_Image" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup_selectSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_settingTitle">
-
-        <RadioButton
-        android:id="@+id/radioButton_selectWeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/fragment_createExercise_settingWeight"
-        android:checked="true"/>
-
-        <RadioButton
-            android:id="@+id/radioButton_selectTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="@string/fragment_createExercise_settingTime" />
-
-        </RadioGroup>
 
     <Button
         android:id="@+id/createExerciseConfirm"

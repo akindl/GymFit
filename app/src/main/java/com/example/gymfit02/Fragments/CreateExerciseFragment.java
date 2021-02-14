@@ -70,12 +70,12 @@ public class CreateExerciseFragment extends Fragment {
 
         createExerciseBtn = (Button) rootView.findViewById(R.id.createExerciseConfirm);
         setCreateNewExerciseListener();
-        radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroup_selectSetting);
-        radioButton_weight = (RadioButton) rootView.findViewById(R.id.radioButton_selectWeight);
-        radioButton_time = (RadioButton) rootView.findViewById(R.id.radioButton_selectTime);
+        // radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroup_selectSetting);
+        // radioButton_weight = (RadioButton) rootView.findViewById(R.id.radioButton_selectWeight);
+        // radioButton_time = (RadioButton) rootView.findViewById(R.id.radioButton_selectTime);
 
         createExercise_title = (EditText) rootView.findViewById(R.id.createExercise_title);
-        textView_settingTitle = (TextView) rootView.findViewById(R.id.textView_settingTitle);
+        // textView_settingTitle = (TextView) rootView.findViewById(R.id.textView_settingTitle);
 
 
         return rootView;

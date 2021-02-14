@@ -130,8 +130,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-                            Toast.makeText(RegisterActivity.this, "Du hast Dich erfolgreich registriert!", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "createUserWithEmail: success");
+                            // Toast.makeText(RegisterActivity.this, "Du hast Dich erfolgreich registriert!", Toast.LENGTH_SHORT).show();
+                            // Log.d(TAG, "createUserWithEmail: success");
 
 
 

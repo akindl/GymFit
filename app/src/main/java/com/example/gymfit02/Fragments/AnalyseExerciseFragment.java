@@ -1,6 +1,7 @@
 package com.example.gymfit02.Fragments;
 
 import android.graphics.Color;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -227,6 +229,8 @@ public class AnalyseExerciseFragment extends Fragment {
                 .collection("Exercises").document(exerciseId)
                 .collection("ExercisePerformances")
                 .whereGreaterThanOrEqualTo("setCount", 1)
+                // .orderBy("setCount", Query.Direction.ASCENDING)
+                // .orderBy("performanceDate", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
