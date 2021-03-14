@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gymfit02.Models.DatabaseExerciseModel;
 import com.example.gymfit02.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 // import com.google.firebase.firestore.FirebaseFirestore;
@@ -148,6 +150,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "onSuccess: user profile is created on firestore for " + userID);
+
+                                    // Save demo exercises to user data
+                                    for(DatabaseExerciseModel model : loadDemoExercises())
+                                        saveExerciseToDatabase(model);
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -156,7 +163,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                             });
 
+
                             // ----------------- END: Save user data in Firestore -------------------
+
 
 
 
@@ -184,6 +193,118 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
+    }
+
+
+
+    private ArrayList<DatabaseExerciseModel> loadDemoExercises() {
+        ArrayList<DatabaseExerciseModel>list = new ArrayList<>();
+
+
+        DatabaseExerciseModel databaseExerciseModel = new DatabaseExerciseModel();
+        databaseExerciseModel.setExerciseName("Bankdrücken");
+        databaseExerciseModel.setDeviceName("Flachbank");
+        databaseExerciseModel.setNotes("");
+        databaseExerciseModel.setCreatorId("admin");
+        databaseExerciseModel.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel);
+
+        DatabaseExerciseModel databaseExerciseModel2 = new DatabaseExerciseModel();
+        databaseExerciseModel2.setExerciseName("Bankdrücken");
+        databaseExerciseModel2.setDeviceName("Schrägbank");
+        databaseExerciseModel2.setNotes("");
+        databaseExerciseModel2.setCreatorId("admin");
+        databaseExerciseModel2.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel2);
+
+        DatabaseExerciseModel databaseExerciseModel3 = new DatabaseExerciseModel();
+        databaseExerciseModel3.setExerciseName("Bankdrücken");
+        databaseExerciseModel3.setDeviceName("Multipresse");
+        databaseExerciseModel3.setNotes("");
+        databaseExerciseModel3.setCreatorId("admin");
+        databaseExerciseModel3.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel3);
+
+        DatabaseExerciseModel databaseExerciseModel4 = new DatabaseExerciseModel();
+        databaseExerciseModel4.setExerciseName("Kniebeuge");
+        databaseExerciseModel4.setDeviceName("Langhantel");
+        databaseExerciseModel4.setNotes("");
+        databaseExerciseModel4.setCreatorId("admin");
+        databaseExerciseModel4.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel4);
+
+        DatabaseExerciseModel databaseExerciseModel5 = new DatabaseExerciseModel();
+        databaseExerciseModel5.setExerciseName("Ausfallschritt");
+        databaseExerciseModel5.setDeviceName("Langhantel");
+        databaseExerciseModel5.setNotes("");
+        databaseExerciseModel5.setCreatorId("admin");
+        databaseExerciseModel5.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel5);
+
+        DatabaseExerciseModel databaseExerciseModel6 = new DatabaseExerciseModel();
+        databaseExerciseModel6.setExerciseName("Schulterdrücken");
+        databaseExerciseModel6.setDeviceName("Kurzhantel");
+        databaseExerciseModel6.setNotes("");
+        databaseExerciseModel6.setCreatorId("admin");
+        databaseExerciseModel6.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel6);
+
+        DatabaseExerciseModel databaseExerciseModel7 = new DatabaseExerciseModel();
+        databaseExerciseModel7.setExerciseName("Seitheben");
+        databaseExerciseModel7.setDeviceName("Kurzhantel");
+        databaseExerciseModel7.setNotes("");
+        databaseExerciseModel7.setCreatorId("admin");
+        databaseExerciseModel7.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel7);
+
+        DatabaseExerciseModel databaseExerciseModel8 = new DatabaseExerciseModel();
+        databaseExerciseModel8.setExerciseName("Butterfly");
+        databaseExerciseModel8.setDeviceName("Maschine");
+        databaseExerciseModel8.setNotes("");
+        databaseExerciseModel8.setCreatorId("admin");
+        databaseExerciseModel8.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel8);
+
+        DatabaseExerciseModel databaseExerciseModel9 = new DatabaseExerciseModel();
+        databaseExerciseModel9.setExerciseName("Reverse Butterfly");
+        databaseExerciseModel9.setDeviceName("Maschine");
+        databaseExerciseModel9.setNotes("");
+        databaseExerciseModel9.setCreatorId("admin");
+        databaseExerciseModel9.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel9);
+
+        DatabaseExerciseModel databaseExerciseModel10 = new DatabaseExerciseModel();
+        databaseExerciseModel10.setExerciseName("Rudern");
+        databaseExerciseModel10.setDeviceName("Seilzug");
+        databaseExerciseModel10.setNotes("");
+        databaseExerciseModel10.setCreatorId("admin");
+        databaseExerciseModel10.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel10);
+
+        DatabaseExerciseModel databaseExerciseModel11 = new DatabaseExerciseModel();
+        databaseExerciseModel11.setExerciseName("Latzug");
+        databaseExerciseModel11.setDeviceName("Seilzug");
+        databaseExerciseModel11.setNotes("");
+        databaseExerciseModel11.setCreatorId("admin");
+        databaseExerciseModel11.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel11);
+
+        DatabaseExerciseModel databaseExerciseModel12 = new DatabaseExerciseModel();
+        databaseExerciseModel12.setExerciseName("Klimmzug");
+        databaseExerciseModel12.setDeviceName("Stange");
+        databaseExerciseModel12.setNotes("");
+        databaseExerciseModel12.setCreatorId("admin");
+        databaseExerciseModel12.setWorkouts(new ArrayList<String>());
+        list.add(databaseExerciseModel12);
+
+
+        return list;
+
+    }
+
+    private void saveExerciseToDatabase(DatabaseExerciseModel model) {
+        fStore.collection("Users").document(userID)
+                .collection("Exercises").add(model);
     }
 }
 

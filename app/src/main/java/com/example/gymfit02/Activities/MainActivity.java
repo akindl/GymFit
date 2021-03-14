@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.gymfit02.Fragments.AnalyseExerciseFragment;
 import com.example.gymfit02.Fragments.AnalyseFragment;
+import com.example.gymfit02.Fragments.ExerciseFragment;
 import com.example.gymfit02.Fragments.TrainingFragment;
 import com.example.gymfit02.Fragments.FriendsFragment;
 import com.example.gymfit02.Fragments.ProfilFragment;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment analyseFragment;
     private Fragment friendsFragment;
     private Fragment profilFragment;
+    private Fragment exerciseFragment;
 
 
     @Override
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         analyseFragment = new AnalyseFragment();
         friendsFragment = new FriendsFragment();
         profilFragment = new ProfilFragment();
+        exerciseFragment = new ExerciseFragment();
 
 
         fAuth = FirebaseAuth.getInstance();
@@ -93,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.dashboard:
                         setFragment(trainingFragment);
                         // Toast.makeText(MainActivity.this, "Training", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.exercise:
+                        setFragment(exerciseFragment);
+                        // Toast.makeText(MainActivity.this, "Übungen", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.analyse:
                         setFragment(analyseFragment); // analyseFragment analyseExerciseFragment

@@ -180,7 +180,7 @@
                 android:background="@drawable/my_round_grey_bg"
                 android:ems="5"
                 android:hint="@string/fragment_workoutSingleExercisePerformance_loadHint"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:padding="5dp"
                 android:text=""
                 android:textAlignment="center"

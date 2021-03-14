@@ -24,6 +24,7 @@
 
     <!-- Navigation -->
     <string name="navbar_title_dashboard">Training</string>
+    <string name="navbar_title_exercise">Übungen</string>
     <string name="navbar_title_analyse">Analyse</string>
     <string name="navbar_title_friends">Freunde</string>
     <string name="navbar_title_profil">Profil</string>
@@ -37,16 +38,19 @@
     <string name="profile_text_accountNotVerified">Wichtig: Dein Konto ist noch nicht verifiziert!</string>
 
 
-    <!-- Fragment: ExercisesOverview -->
-    <string name="fragment_exerciseOverview_button_createExercise">Übung erstellen</string>
+    <!-- Fragment: Exercise -->
+    <string name="fragment_exercise_button_createExercise">Übung erstellen</string>
 
 
     <!-- Fragment: CreateExercise -->
-    <string name="fragment_createExercise_title">Name der Übung</string>
-    <string name="fragment_createExercise_settingTitle">Welche Eigenschaft hat die neue Übung?</string>
-    <string name="fragment_createExercise_settingWeight">Gewicht</string>
-    <string name="fragment_createExercise_settingTime">Laufzeit</string>
-    <string name="fragment_createExercise_confirm">Übung erstellen</string>
+    <string name="fragment_createExercise_exerciseName_title">Wie lautet die Übung?</string>
+    <string name="fragment_createExercise_exerciseName">Name der Übung</string>
+    <string name="fragment_createExercise_deviceName_title">Wie heißt das Gerät der Übung?</string>
+    <string name="fragment_createExercise_deviceName">Name des Geräts</string>
+    <string name="fragment_createExercise_notes_title">Notizen zu deiner Übung:</string>
+    <string name="fragment_createExercise_notes">Deine Notizen</string>
+
+    <string name="fragment_createExercise_confirm">Übung speichern</string>
 
 
     <!-- Fragment: Training -->

@@ -15,12 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.gymfit02.Models.DatabaseExerciseModel;
 import com.example.gymfit02.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO Button muss neue UserExercise in Firebase anlegen
 //TODO RadioButtons: https://www.youtube.com/watch?v=fwSJ1OkK304
@@ -32,6 +38,7 @@ public class CreateExerciseFragment extends Fragment {
 
     private static final String TAG = "createExerciseFragment";
 
+    // Firestore Connection
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private String userId;
@@ -39,14 +46,23 @@ public class CreateExerciseFragment extends Fragment {
     private DocumentReference documentReferenceUsers;
     private StorageReference storageReference;
 
+    // Bundle Information
+    private String exerciseId;
+    private String exerciseName;
+    private String deviceName;
+    private String notes;
 
+
+    // View
     private Button createExerciseBtn;
-    private RadioGroup radioGroup;
-    private RadioButton radioButton_weight;
-    private RadioButton radioButton_time;
+    private TextView exerciseNameTitleTextField;
+    private TextView deviceNameTitleTextField;
+    private TextView notesTitleTextField;
+    private EditText exerciseNameEditText;
+    private EditText deviceNameEditText;
+    private EditText notesEditText;
 
-    private EditText createExercise_title;
-    private TextView textView_settingTitle;
+
 
 
 
@@ -57,6 +73,14 @@ public class CreateExerciseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+        if(bundle != null) {
+            this.exerciseId = bundle.getString("exerciseId");
+            this.exerciseName = bundle.getString("exerciseName");
+            this.deviceName = bundle.getString("deviceName");
+            this.notes = bundle.getString("notes");
+        }
+
         setupFirestoreConnection();
     }
 
@@ -65,18 +89,29 @@ public class CreateExerciseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_exercise, container, false);
 
-        getActivity().setTitle("Neue Übung erstellen");
+        getActivity().setTitle("Übung erstellen und bearbeiten");
 
+        createExerciseBtn = (Button) rootView.findViewById(R.id.createExercise_btn_confirm);
 
-        createExerciseBtn = (Button) rootView.findViewById(R.id.createExerciseConfirm);
-        setCreateNewExerciseListener();
         // radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroup_selectSetting);
         // radioButton_weight = (RadioButton) rootView.findViewById(R.id.radioButton_selectWeight);
         // radioButton_time = (RadioButton) rootView.findViewById(R.id.radioButton_selectTime);
 
-        createExercise_title = (EditText) rootView.findViewById(R.id.createExercise_title);
-        // textView_settingTitle = (TextView) rootView.findViewById(R.id.textView_settingTitle);
+        exerciseNameTitleTextField = (TextView) rootView.findViewById(R.id.createExercise_exerciseName_title);
+        deviceNameTitleTextField = (TextView) rootView.findViewById(R.id.createExercise_deviceName_title);
+        notesTitleTextField = (TextView) rootView.findViewById(R.id.createExercise_notes_title);
+        exerciseNameEditText = (EditText) rootView.findViewById(R.id.createExercise_exerciseName);
+        deviceNameEditText = (EditText) rootView.findViewById(R.id.createExercise_deviceName);
+        notesEditText = (EditText) rootView.findViewById(R.id.createExercise_notes);
 
+        // Set Bundle infos
+        if(!exerciseId.isEmpty()) {
+            exerciseNameEditText.setText(exerciseName);
+            deviceNameEditText.setText(deviceName);
+            notesEditText.setText(notes);
+        }
+
+        setCreateNewExerciseListener();
 
         return rootView;
     }
@@ -96,17 +131,117 @@ public class CreateExerciseFragment extends Fragment {
 
     }
 
-    /**
-     *
-     */
+
     private void setCreateNewExerciseListener() {
         createExerciseBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Button geklickt", Toast.LENGTH_SHORT).show();
+                if(exerciseNameEditText.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Bitte gib der Übung einen Namen.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(deviceNameEditText.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Bitte gib einen Gerätenamen ein.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String exercise_name = exerciseNameEditText.getText().toString();
+                String device_name = deviceNameEditText.getText().toString();
+                String exercise_notes = notesEditText.getText().toString();
+
+                if(!exerciseId.isEmpty()) {
+
+                    if(!exercise_name.equals(exerciseName)) {
+                        updateDatabaseExerciseField("exerciseName", exercise_name);
+                        exerciseName = exercise_name;
+                    }
+
+                    if(!device_name.equals(deviceName)) {
+                        updateDatabaseExerciseField("deviceName", device_name);
+                        deviceName = device_name;
+                    }
+
+                    if(!exercise_notes.equals(notes)) {
+                        updateDatabaseExerciseField("notes", exercise_notes);
+                        notes = exercise_notes;
+                    }
+
+                // Create new exercise
+                } else {
+
+                    DatabaseExerciseModel exerciseModel = new DatabaseExerciseModel();
+
+                    List<String> workouts = new ArrayList<>();
+
+                    exerciseModel.setCreatorId(userId);
+                    exerciseModel.setExerciseName(exercise_name);
+                    exerciseModel.setDeviceName(device_name);
+                    exerciseModel.setNotes(exercise_notes);
+                    exerciseModel.setWorkouts(workouts);
+
+                    fStore.collection("Users").document(userId).collection("Exercises")
+                            .add(exerciseModel);
+
+                }
+
+                ExerciseFragment exerciseFragment = new ExerciseFragment();
+
+                Toast.makeText(getContext(), "Speichern erfolgreich!",
+                        Toast.LENGTH_LONG).show();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        // fragment_container_view is the FragmentContainer of all fragments in MainActivity
+                        .replace(R.id.fragment_container_view, exerciseFragment, "openCreateWorkoutFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+
+
             }
 
         });
     }
+
+    private void updateDatabaseExerciseField(String key, String value) {
+        fStore.collection("Users").document(userId)
+                .collection("Exercises").document(exerciseId)
+                .update(key, value);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

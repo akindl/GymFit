@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_baseline_fitness_center_24"
         android:title="@string/navbar_title_dashboard" />
     <item
+        android:id="@+id/exercise"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
+        android:title="@string/navbar_title_exercise" />
+    <item
         android:id="@+id/analyse"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_trending_up_24"

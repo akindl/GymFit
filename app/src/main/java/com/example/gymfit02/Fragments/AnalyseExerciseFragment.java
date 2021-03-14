@@ -50,6 +50,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class AnalyseExerciseFragment extends Fragment {
 
@@ -77,7 +78,7 @@ public class AnalyseExerciseFragment extends Fragment {
 
         // Get the workoutId from the selected Workout
         Bundle bundle = this.getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             this.exerciseId = bundle.getString("exerciseId");
             this.exerciseName = bundle.getString("exerciseName");
             this.deviceName = bundle.getString("deviceName");
@@ -145,7 +146,7 @@ public class AnalyseExerciseFragment extends Fragment {
         // enable scaling and dragging
         chart.setDragEnabled(true);
         chart.setScaleEnabled(true);
-        chart.setBackgroundColor(Color.argb(50,78,101,120));
+        chart.setBackgroundColor(Color.argb(50, 78, 101, 120));
         chart.setDrawGridBackground(false);
         chart.setHighlightPerDragEnabled(true);
 
@@ -182,7 +183,7 @@ public class AnalyseExerciseFragment extends Fragment {
         yAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return String.valueOf(value + " " +  yAxisUnit);
+                return String.valueOf(value + " " + yAxisUnit);
             }
         });
 
@@ -191,24 +192,24 @@ public class AnalyseExerciseFragment extends Fragment {
 
         // Data
         LineDataSet set1 = new LineDataSet(values, name);
-        if(setCubicMode) {
+        if (setCubicMode) {
             set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             set1.enableDashedLine(10f, 10f, 10f);
         }
         set1.setCubicIntensity(0.2f);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set1.setColor(Color.rgb(113,152,47)); // NEW ColorTemplate.getHoloBlue()
+        set1.setColor(Color.rgb(113, 152, 47)); // NEW ColorTemplate.getHoloBlue()
         // set1.setValueTextColor(ColorTemplate.getHoloBlue());
         set1.setLineWidth(3f);
         set1.setDrawValues(true);
         // set1.setFillAlpha(100);
-        set1.setFillColor(Color.rgb(113,152,47)); // NEW ColorTemplate.getHoloBlue()
-        set1.setHighLightColor(Color.rgb(244,117,117));
+        set1.setFillColor(Color.rgb(113, 152, 47)); // NEW ColorTemplate.getHoloBlue()
+        set1.setHighLightColor(Color.rgb(244, 117, 117));
         set1.setDrawCircleHole(false);
 
         set1.setDrawCircles(true);
         set1.setCircleRadius(5f);
-        set1.setCircleColor(Color.rgb(113,152,47));
+        set1.setCircleColor(Color.rgb(113, 152, 47));
 
         // create a data object with the data sets
         LineData data = new LineData(set1);
@@ -228,9 +229,9 @@ public class AnalyseExerciseFragment extends Fragment {
         fStore.collection("Users").document(userId)
                 .collection("Exercises").document(exerciseId)
                 .collection("ExercisePerformances")
-                .whereGreaterThanOrEqualTo("setCount", 1)
+                .orderBy("performanceDate", Query.Direction.ASCENDING)
+                // .whereGreaterThanOrEqualTo("setCount", 1)
                 // .orderBy("setCount", Query.Direction.ASCENDING)
-                // .orderBy("performanceDate", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -239,18 +240,27 @@ public class AnalyseExerciseFragment extends Fragment {
                         ArrayList<Entry> totalVolumeData = new ArrayList<>();
                         ArrayList<Entry> totalSetsData = new ArrayList<>();
 
+
                         for (DocumentSnapshot performanceSetSnapshot : data) {
                             DatabaseExercisePerformanceModel performanceSetModel = performanceSetSnapshot.toObject(DatabaseExercisePerformanceModel.class);
-                            maxOneRepData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getOneRepMax()));
-                            totalVolumeData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getTotalVolume()));
-                            totalSetsData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getSetCount()));
+
+                            if (performanceSetModel != null && performanceSetModel.getSetCount() > 0) {
+                                maxOneRepData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getOneRepMax()));
+                                totalVolumeData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getTotalVolume()));
+                                totalSetsData.add(new Entry(performanceSetModel.getPerformanceDate().getSeconds(), performanceSetModel.getSetCount()));
+                            }
                         }
+
+                        // maxOneRepData = maxOneRepData.stream().map(e -> e).collect(Collectors.toList());
+
                         oneRepMaxDataListener.onSuccess(maxOneRepData);
                         totalVolumeDataListener.onSuccess(totalVolumeData);
                         totalSetsDataListener.onSuccess(totalSetsData);
                     }
                 });
     }
+
+
 }
 
 

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.gymfit02.Database.Plan;
 import com.example.gymfit02.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -122,12 +121,15 @@ public class TrainingFragment extends Fragment {
         imageViewPlans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 PlansOverviewFragment plansOverviewFragment = new PlansOverviewFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         // fragment_container_view is the FragmentContainer of all fragments in MainActivity
                         .replace(R.id.fragment_container_view, plansOverviewFragment, "")
                         .addToBackStack(null)
                         .commit();
+
+                 */
             }
         });
     }
